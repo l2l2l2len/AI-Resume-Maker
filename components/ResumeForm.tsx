@@ -1,20 +1,17 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { ResumeData, Experience, Education } from '../types';
 import { SectionWrapper } from './ui/SectionWrapper';
 import { Input } from './ui/Input';
 import { Textarea } from './ui/Textarea';
 import { Button } from './ui/Button';
-import { PlusIcon, TrashIcon, SparklesIcon } from './icons';
+import { PlusIcon, TrashIcon } from './icons';
 
 interface ResumeFormProps {
   resumeData: ResumeData;
   onResumeDataChange: (section: keyof ResumeData, data: any) => void;
   jobDescription: string;
   onJobDescriptionChange: (value: string) => void;
-  onGenerateSummary: () => void;
-  onGenerateExperience: (experience: Experience, index: number) => void;
-  loadingStates: { [key: string]: boolean };
 }
 
 export const ResumeForm: React.FC<ResumeFormProps> = ({
@@ -22,9 +19,6 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
   onResumeDataChange,
   jobDescription,
   onJobDescriptionChange,
-  onGenerateSummary,
-  onGenerateExperience,
-  loadingStates,
 }) => {
   
   const handlePersonalInfoChange = (field: keyof ResumeData['personalInfo'], value: string) => {
@@ -92,10 +86,10 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
   return (
     <div className="space-y-6">
-      <SectionWrapper title="Job Description">
+      <SectionWrapper title="Job Description (Optional)">
         <Textarea
           id="job-description"
-          placeholder="Paste the job description here to tailor your resume..."
+          placeholder="Paste the job description here for your reference..."
           value={jobDescription}
           onChange={(e) => onJobDescriptionChange(e.target.value)}
           rows={8}
@@ -120,9 +114,6 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
           onChange={(e) => onResumeDataChange('summary', e.target.value)}
           rows={5}
         />
-         <Button onClick={onGenerateSummary} disabled={loadingStates.summary} className="mt-2 w-full">
-            <SparklesIcon /> {loadingStates.summary ? 'Generating...' : 'Generate with AI'}
-        </Button>
       </SectionWrapper>
 
       <SectionWrapper title="Work Experience">
@@ -142,7 +133,6 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
                 <div className="space-y-2">
                   {exp.bulletPoints.map((bp, bpIndex) => (
                     <div key={bpIndex} className="flex items-center space-x-2">
-                      {/* FIX: Add required id prop to Textarea */}
                       <Textarea id={`experience-${index}-bullet-${bpIndex}`} value={bp} onChange={(e) => handleBulletPointChange(index, bpIndex, e.target.value)} rows={2} className="flex-grow" />
                       <button onClick={() => removeBulletPoint(index, bpIndex)} className="text-slate-400 hover:text-red-500">
                         <TrashIcon />
@@ -154,9 +144,6 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
                   </button>
                 </div>
               </div>
-               <Button onClick={() => onGenerateExperience(exp, index)} disabled={loadingStates[`experience-${index}`]} className="w-full">
-                    <SparklesIcon /> {loadingStates[`experience-${index}`] ? 'Tailoring...' : 'Tailor with AI'}
-                </Button>
             </div>
           ))}
         </div>

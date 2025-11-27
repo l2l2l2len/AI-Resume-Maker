@@ -1,4 +1,3 @@
-
 import { ResumeData } from './types';
 
 export const INITIAL_RESUME_DATA: ResumeData = {
@@ -9,7 +8,7 @@ export const INITIAL_RESUME_DATA: ResumeData = {
     linkedin: 'linkedin.com/in/yourprofile',
     website: 'yourportfolio.com',
   },
-  summary: 'A brief professional summary about yourself. Click the ✨ button in the form to generate one with AI based on your experience and the job description.',
+  summary: 'A brief professional summary about yourself. Highlight your key skills and achievements related to the job you are applying for.',
   experience: [
     {
       id: 'exp1',
@@ -31,5 +30,5 @@ export const INITIAL_RESUME_DATA: ResumeData = {
       date: 'Sep 2016 - May 2020',
     },
   ],
-  skills: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'UI/UX Design', 'Gemini API'],
+  skills: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'UI/UX Design'],
 };

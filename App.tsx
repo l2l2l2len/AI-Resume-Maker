@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ResumeData, Experience } from './types';
+import { ResumeData } from './types';
 import { Header } from './components/Header';
 import { ResumeForm } from './components/ResumeForm';
 import { ResumePreview } from './components/ResumePreview';
 import { Homepage } from './components/Homepage';
-import { generateResumeSummary, generateExperiencePoints, isApiConfigured } from './services/geminiService';
+import { isApiConfigured } from './services/geminiService';
 import { INITIAL_RESUME_DATA } from './constants';
 import { TemplateSelector } from './components/TemplateSelector';
 import { ConfigError } from './components/ConfigError';
@@ -37,8 +37,6 @@ const App: React.FC = () => {
     return savedTemplate || 'classic';
   });
 
-  const [loadingStates, setLoadingStates] = useState<{ [key: string]: boolean }>({});
-
   useEffect(() => {
     localStorage.setItem('resumeData', JSON.stringify(resumeData));
   }, [resumeData]);
@@ -61,35 +59,6 @@ const App: React.FC = () => {
     }));
   };
   
-  const handleGenerateSummary = async () => {
-    setLoadingStates(prev => ({ ...prev, summary: true }));
-    try {
-      const summary = await generateResumeSummary(resumeData, jobDescription);
-      handleResumeDataChange('summary', summary);
-    } catch (error) {
-      console.error("Failed to generate summary:", error);
-      alert("Error generating summary. Check the console for details.");
-    } finally {
-      setLoadingStates(prev => ({ ...prev, summary: false }));
-    }
-  };
-
-  const handleGenerateExperience = async (experience: Experience, index: number) => {
-    const key = `experience-${index}`;
-    setLoadingStates(prev => ({ ...prev, [key]: true }));
-    try {
-      const bulletPoints = await generateExperiencePoints(experience, jobDescription);
-      const updatedExperience = [...resumeData.experience];
-      updatedExperience[index] = { ...updatedExperience[index], bulletPoints };
-      handleResumeDataChange('experience', updatedExperience);
-    } catch (error) {
-      console.error(`Failed to generate experience for item ${index}:`, error);
-      alert(`Error generating experience points. Check the console for details.`);
-    } finally {
-      setLoadingStates(prev => ({ ...prev, [key]: false }));
-    }
-  };
-
   const handleResetResume = () => {
     if (window.confirm("Are you sure you want to start a new resume? All current data will be lost.")) {
       setResumeData(INITIAL_RESUME_DATA);
@@ -118,9 +87,6 @@ const App: React.FC = () => {
               onResumeDataChange={handleResumeDataChange}
               jobDescription={jobDescription}
               onJobDescriptionChange={setJobDescription}
-              onGenerateSummary={handleGenerateSummary}
-              onGenerateExperience={handleGenerateExperience}
-              loadingStates={loadingStates}
             />
             <div className="sticky top-8 space-y-6">
               <TemplateSelector

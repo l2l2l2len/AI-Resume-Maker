@@ -1,5 +1,5 @@
 {
   "name": "AI Resume Maker",
-  "description": "An intelligent resume builder that leverages AI to help you tailor your resume to specific job descriptions. Input your details, paste a job description, and let the AI craft compelling summaries and experience points.",
+  "description": "A powerful and easy-to-use resume builder to help you craft a professional resume. Choose from multiple templates, see a live preview, and export to PDF.",
   "requestFramePermissions": []
 }

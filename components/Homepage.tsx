@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from './ui/Button';
-import { SparklesIcon, TargetIcon, FileTextIcon } from './icons';
+import { TargetIcon, FileTextIcon, DownloadIcon } from './icons';
 
 interface HomepageProps {
   onStart: () => void;
@@ -26,35 +26,35 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
   return (
     <div className="text-center py-16 px-4">
       <h1 className="text-4xl md:text-6xl font-extrabold text-slate-100 mb-4 tracking-tight">
-        Build Your <span className="gradient-text">Job-Winning Resume</span> with AI
+        Build Your <span className="gradient-text">Job-Winning Resume</span>
       </h1>
       <p className="max-w-3xl mx-auto text-lg text-slate-400 mb-10">
-        Craft a professional resume tailored to any job description in minutes. Let our AI be your career co-pilot and land your dream job faster.
+        Craft a professional resume in minutes. Choose from multiple templates, see a live preview, and export to PDF to land your dream job faster.
       </p>
       <Button onClick={onStart} className="px-8 py-3 text-lg font-bold shadow-lg shadow-purple-600/20 transform hover:scale-105">
         Get Started for Free
       </Button>
 
       <div className="mt-24">
-        <h2 className="text-3xl font-bold text-center mb-12 text-slate-100">Why Choose AI Resume Maker?</h2>
+        <h2 className="text-3xl font-bold text-center mb-12 text-slate-100">Why Choose Resume Maker?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
            <FeatureCard
-             icon={<SparklesIcon />}
-             title="AI-Powered Summary"
+             icon={<FileTextIcon />}
+             title="Multiple Templates"
            >
-              Instantly generate a compelling professional summary that grabs recruiters' attention.
+              Choose from a selection of ATS-friendly templates: Classic, Modern, and Compact.
            </FeatureCard>
            <FeatureCard
              icon={<TargetIcon />}
-             title="Tailored Experience"
-           >
-              Optimize your work experience bullet points to match the specific keywords and requirements of the job.
-           </FeatureCard>
-           <FeatureCard
-             icon={<FileTextIcon />}
-             title="Professional Preview"
+             title="Live Preview"
            >
               See your resume come to life in a clean, modern template as you type, ready to impress.
+           </FeatureCard>
+           <FeatureCard
+             icon={<DownloadIcon />}
+             title="Easy PDF Export"
+           >
+              Download a pixel-perfect PDF of your resume with a single click, ready for recruiters.
            </FeatureCard>
         </div>
       </div>
