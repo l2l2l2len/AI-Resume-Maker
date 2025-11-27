@@ -1,0 +1,5 @@
+{
+  "name": "AI Resume Maker",
+  "description": "An intelligent resume builder that leverages AI to help you tailor your resume to specific job descriptions. Input your details, paste a job description, and let the AI craft compelling summaries and experience points.",
+  "requestFramePermissions": []
+}
