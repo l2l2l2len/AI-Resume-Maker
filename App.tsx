@@ -4,13 +4,18 @@ import { Header } from './components/Header';
 import { ResumeForm } from './components/ResumeForm';
 import { ResumePreview } from './components/ResumePreview';
 import { Homepage } from './components/Homepage';
-import { generateResumeSummary, generateExperiencePoints } from './services/geminiService';
+import { generateResumeSummary, generateExperiencePoints, isApiConfigured } from './services/geminiService';
 import { INITIAL_RESUME_DATA } from './constants';
 import { TemplateSelector } from './components/TemplateSelector';
+import { ConfigError } from './components/ConfigError';
 
 export type Template = 'classic' | 'modern' | 'compact';
 
 const App: React.FC = () => {
+  if (!isApiConfigured) {
+    return <ConfigError />;
+  }
+
   const [view, setView] = useState<'homepage' | 'builder'>('homepage');
   
   const [resumeData, setResumeData] = useState<ResumeData>(() => {

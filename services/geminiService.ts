@@ -1,14 +1,16 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { ResumeData, Experience } from '../types';
 
 const API_KEY = process.env.API_KEY;
 
-if (!API_KEY) {
-    throw new Error("API_KEY environment variable is not set.");
+export const isApiConfigured = !!API_KEY;
+
+// Lazily initialize the AI client to prevent crashing on load if the key is missing.
+let ai: GoogleGenAI | null = null;
+if (isApiConfigured) {
+    ai = new GoogleGenAI({ apiKey: API_KEY });
 }
 
-const ai = new GoogleGenAI({ apiKey: API_KEY });
 const model = 'gemini-2.5-flash';
 
 const formatResumeDataForPrompt = (data: ResumeData): string => {
@@ -31,6 +33,10 @@ export const generateResumeSummary = async (
     resumeData: ResumeData,
     jobDescription: string
 ): Promise<string> => {
+    if (!ai) {
+        throw new Error("Gemini API key is not configured. Please set the API_KEY environment variable in your deployment settings.");
+    }
+
     const prompt = `
         Act as a professional resume writer and career coach.
         Based on the following resume details and the target job description, write a compelling and concise professional summary of 2-4 sentences.
@@ -66,6 +72,10 @@ export const generateExperiencePoints = async (
     experience: Experience,
     jobDescription: string
 ): Promise<string[]> => {
+    if (!ai) {
+        throw new Error("Gemini API key is not configured. Please set the API_KEY environment variable in your deployment settings.");
+    }
+
     const prompt = `
         Act as a professional resume writer. Your task is to rewrite and enhance the bullet points for a specific job experience to align them perfectly with a target job description.
         Use the STAR (Situation, Task, Action, Result) method where possible to create impactful, achievement-oriented bullet points.
@@ -85,7 +95,6 @@ export const generateExperiencePoints = async (
     `;
 
     try {
-        // FIX: Use responseSchema for reliable JSON output as per Gemini API guidelines.
         const response = await ai.models.generateContent({
             model,
             contents: prompt,
@@ -102,7 +111,6 @@ export const generateExperiencePoints = async (
         });
         
         if (response.text) {
-            // When using responseSchema, the output should be a clean JSON string.
             const jsonString = response.text.trim();
             const points = JSON.parse(jsonString);
             return Array.isArray(points) ? points : [];
