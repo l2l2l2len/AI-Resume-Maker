@@ -10,13 +10,14 @@ import { TemplateSelector } from './components/TemplateSelector';
 import { ConfigError } from './components/ConfigError';
 
 export type Template = 'classic' | 'modern' | 'compact';
+export type Step = 'homepage' | 'template' | 'form' | 'preview';
 
 const App: React.FC = () => {
   if (!isApiConfigured) {
     return <ConfigError />;
   }
 
-  const [view, setView] = useState<'homepage' | 'builder'>('homepage');
+  const [step, setStep] = useState<Step>('homepage');
   
   const [resumeData, setResumeData] = useState<ResumeData>(() => {
     try {
@@ -64,39 +65,56 @@ const App: React.FC = () => {
       setResumeData(INITIAL_RESUME_DATA);
       setJobDescription('');
       setSelectedTemplate('classic');
-      setView('homepage');
+      setStep('homepage');
     }
   };
 
-  const showBuilder = () => setView('builder');
-  const showHomepage = () => setView('homepage');
+  const renderStep = () => {
+    switch(step) {
+      case 'homepage':
+        return <Homepage onStart={() => setStep('template')} />;
+      case 'template':
+        return (
+          <div className="max-w-4xl mx-auto">
+            <TemplateSelector
+              selectedTemplate={selectedTemplate}
+              onSelectTemplate={setSelectedTemplate}
+              onNext={() => setStep('form')}
+            />
+          </div>
+        );
+      case 'form':
+        return (
+          <ResumeForm
+            resumeData={resumeData}
+            onResumeDataChange={handleResumeDataChange}
+            jobDescription={jobDescription}
+            onJobDescriptionChange={setJobDescription}
+            onPreview={() => setStep('preview')}
+            onBack={() => setStep('template')}
+          />
+        );
+      case 'preview':
+        return (
+          <ResumePreview
+            resumeData={resumeData}
+            template={selectedTemplate}
+            onEdit={() => setStep('form')}
+          />
+        );
+      default:
+        return <Homepage onStart={() => setStep('template')} />;
+    }
+  }
 
   return (
     <div className="min-h-screen text-slate-100 font-sans">
       <Header 
-        onHomeClick={view === 'builder' ? showHomepage : undefined}
-        onResetResume={view === 'builder' ? handleResetResume : undefined}
+        onHomeClick={step !== 'homepage' ? () => setStep('homepage') : undefined}
+        onResetResume={step !== 'homepage' ? handleResetResume : undefined}
       />
       <main className="container mx-auto px-4 py-8">
-        {view === 'homepage' ? (
-          <Homepage onStart={showBuilder} />
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-            <ResumeForm
-              resumeData={resumeData}
-              onResumeDataChange={handleResumeDataChange}
-              jobDescription={jobDescription}
-              onJobDescriptionChange={setJobDescription}
-            />
-            <div className="sticky top-8 space-y-6">
-              <TemplateSelector
-                selectedTemplate={selectedTemplate}
-                onSelectTemplate={setSelectedTemplate}
-              />
-              <ResumePreview resumeData={resumeData} template={selectedTemplate} />
-            </div>
-          </div>
-        )}
+        {renderStep()}
       </main>
     </div>
   );

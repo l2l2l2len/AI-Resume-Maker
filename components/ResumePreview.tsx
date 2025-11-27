@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ResumeData } from '../types';
 import { Button } from './ui/Button';
-import { DownloadIcon, SpinnerIcon } from './icons';
+import { DownloadIcon, SpinnerIcon, BackIcon } from './icons';
 import { Template } from '../App';
 import { TemplateClassic } from './templates/TemplateClassic';
 import { TemplateModern } from './templates/TemplateModern';
@@ -13,6 +13,7 @@ declare const jspdf: { jsPDF: any };
 interface ResumePreviewProps {
   resumeData: ResumeData;
   template: Template;
+  onEdit: () => void;
 }
 
 const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
@@ -21,7 +22,7 @@ const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
   compact: TemplateCompact,
 };
 
-export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, template }) => {
+export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, template, onEdit }) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
 
@@ -71,30 +72,38 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
   const SelectedTemplate = templates[template];
 
   return (
-    <div className="bg-slate-900/50 border border-slate-700/50 shadow-lg rounded-lg p-8 A4-aspect-ratio backdrop-blur-sm relative">
-      <Button 
-        onClick={handleExportPdf}
-        disabled={isExporting}
-        variant="secondary"
-        className="absolute top-4 right-4 z-10"
-      >
-        {isExporting ? <SpinnerIcon /> : <DownloadIcon />}
-        {isExporting ? 'Exporting...' : 'Export PDF'}
-      </Button>
-
-      <div className="bg-white text-black shadow-inner rounded-md h-full overflow-auto">
-        <SelectedTemplate ref={previewRef} resumeData={resumeData} />
+    <div className="space-y-6">
+      <div className="bg-slate-900/40 backdrop-blur-md p-4 rounded-lg shadow-2xl border border-slate-700/50 flex justify-between items-center">
+          <h2 className="text-xl font-semibold text-slate-100">Final Preview</h2>
+          <div className="flex items-center gap-4">
+              <Button onClick={onEdit} variant="secondary">
+                  <BackIcon /> Edit Details
+              </Button>
+              <Button 
+                onClick={handleExportPdf}
+                disabled={isExporting}
+              >
+                {isExporting ? <SpinnerIcon /> : <DownloadIcon />}
+                {isExporting ? 'Exporting...' : 'Export PDF'}
+              </Button>
+          </div>
       </div>
-      <style>{`
-        @media screen {
-          .A4-aspect-ratio {
-            aspect-ratio: 210 / 297;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
+      
+      <div className="bg-slate-900/50 border border-slate-700/50 shadow-lg rounded-lg p-8 A4-aspect-ratio backdrop-blur-sm">
+        <div className="bg-white text-black shadow-inner rounded-md h-full overflow-auto">
+          <SelectedTemplate ref={previewRef} resumeData={resumeData} />
+        </div>
+        <style>{`
+          @media screen {
+            .A4-aspect-ratio {
+              aspect-ratio: 210 / 297;
+              max-width: 800px;
+              margin-left: auto;
+              margin-right: auto;
+            }
           }
-        }
-      `}</style>
+        `}</style>
+      </div>
     </div>
   );
 };

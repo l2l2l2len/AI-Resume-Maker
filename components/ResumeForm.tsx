@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { ResumeData, Experience, Education } from '../types';
 import { SectionWrapper } from './ui/SectionWrapper';
@@ -12,6 +11,8 @@ interface ResumeFormProps {
   onResumeDataChange: (section: keyof ResumeData, data: any) => void;
   jobDescription: string;
   onJobDescriptionChange: (value: string) => void;
+  onPreview: () => void;
+  onBack: () => void;
 }
 
 export const ResumeForm: React.FC<ResumeFormProps> = ({
@@ -19,6 +20,8 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
   onResumeDataChange,
   jobDescription,
   onJobDescriptionChange,
+  onPreview,
+  onBack,
 }) => {
   
   const handlePersonalInfoChange = (field: keyof ResumeData['personalInfo'], value: string) => {
@@ -85,7 +88,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24"> {/* Added padding-bottom for footer clearance */}
       <SectionWrapper title="Job Description (Optional)">
         <Textarea
           id="job-description"
@@ -179,6 +182,20 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
           rows={3}
         />
       </SectionWrapper>
+      
+      {/* Navigation Footer */}
+      <div className="fixed bottom-0 left-0 right-0 z-40">
+        <div className="container mx-auto px-4 py-3">
+          <div className="bg-slate-900/60 backdrop-blur-lg border border-slate-700/50 rounded-lg shadow-2xl p-4 flex justify-between items-center">
+              <Button onClick={onBack} variant="secondary">
+                  Back to Templates
+              </Button>
+              <Button onClick={onPreview}>
+                  Preview Resume
+              </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
