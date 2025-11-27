@@ -42,10 +42,10 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
       const pdfHeight = pdf.internal.pageSize.getHeight();
       
       const canvasAspectRatio = canvas.width / canvas.height;
-      const pdfAspectRatio = pdfWidth / pdfHeight;
+      const pageAspectRatio = pdfWidth / pdfHeight;
 
       let finalWidth, finalHeight;
-      if (canvasAspectRatio > pdfAspectRatio) {
+      if (canvasAspectRatio > pageAspectRatio) {
           finalWidth = pdfWidth;
           finalHeight = pdfWidth / canvasAspectRatio;
       } else {
@@ -73,8 +73,8 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
 
   return (
     <div className="space-y-6">
-      <div className="bg-slate-900/40 backdrop-blur-md p-4 rounded-lg shadow-2xl border border-slate-700/50 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-slate-100">Final Preview</h2>
+      <div className="bg-white/70 backdrop-blur-lg p-4 rounded-lg shadow-md border border-slate-200 flex justify-between items-center">
+          <h2 className="text-xl font-semibold text-slate-800">Final Preview</h2>
           <div className="flex items-center gap-4">
               <Button onClick={onEdit} variant="secondary">
                   <BackIcon /> Edit Details
@@ -89,17 +89,20 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
           </div>
       </div>
       
-      <div className="bg-slate-900/50 border border-slate-700/50 shadow-lg rounded-lg p-8 A4-aspect-ratio backdrop-blur-sm">
+      <div className="bg-slate-200 border border-slate-300 shadow-lg rounded-lg p-8 A4-aspect-ratio">
         <div className="bg-white text-black shadow-inner rounded-md h-full overflow-auto">
           <SelectedTemplate ref={previewRef} resumeData={resumeData} />
         </div>
         <style>{`
-          @media screen {
+          .A4-aspect-ratio {
+            width: 100%;
+            max-width: 850px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+          @media screen and (min-width: 768px) {
             .A4-aspect-ratio {
               aspect-ratio: 210 / 297;
-              max-width: 800px;
-              margin-left: auto;
-              margin-right: auto;
             }
           }
         `}</style>

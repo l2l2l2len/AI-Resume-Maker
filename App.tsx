@@ -108,7 +108,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen text-slate-100 font-sans">
+    <div className="min-h-screen text-slate-800 font-sans">
       <Header 
         onHomeClick={step !== 'homepage' ? () => setStep('homepage') : undefined}
         onResetResume={step !== 'homepage' ? handleResetResume : undefined}

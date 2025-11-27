@@ -19,7 +19,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ selectedTemp
   return (
     <div>
       <SectionWrapper title="Choose a Template">
-        <p className="text-slate-400 mb-6 text-center">Select a template that best fits your style and industry.</p>
+        <p className="text-slate-600 mb-6 text-center">Select a template that best fits your style and industry.</p>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {templates.map((template) => (
             <button
@@ -27,17 +27,17 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ selectedTemp
               onClick={() => onSelectTemplate(template.id)}
               className={`p-2 rounded-lg border-2 transition-all duration-200 group ${
                 selectedTemplate === template.id
-                  ? 'border-blue-500 bg-blue-500/20'
-                  : 'border-slate-700 hover:border-slate-500'
+                  ? 'border-blue-500 bg-blue-50'
+                  : 'border-slate-200 hover:border-slate-300'
               }`}
             >
-              <div className={`h-32 w-full rounded bg-slate-800 flex items-center justify-center overflow-hidden relative transition-transform duration-300 group-hover:scale-105`}>
+              <div className={`h-32 w-full rounded bg-slate-100 flex items-center justify-center overflow-hidden relative transition-transform duration-300 group-hover:scale-105`}>
                 {/* Simple visual representation of the template */}
-                {template.id === 'classic' && <div className="w-10/12 h-10/12 bg-slate-600 rounded-sm p-1 space-y-2"><div className="h-2 bg-slate-500 rounded-sm"></div><div className="h-12 bg-slate-500 rounded-sm"></div></div>}
-                {template.id === 'modern' && <div className="w-10/12 h-10/12 flex space-x-1"><div className="w-1/3 h-full bg-slate-500 rounded-sm"></div><div className="w-2/3 h-full bg-slate-600 rounded-sm p-1 space-y-2"><div className="h-2 bg-slate-500 rounded-sm"></div><div className="h-6 bg-slate-500 rounded-sm"></div></div></div>}
-                {template.id === 'compact' && <div className="w-10/12 h-10/12 bg-slate-600 rounded-sm p-1 space-y-1 text-xs"><div className="h-2 bg-slate-500 rounded-sm"></div><div className="h-2 bg-slate-500 rounded-sm"></div><div className="h-2 bg-slate-500 rounded-sm"></div><div className="h-2 bg-slate-500 rounded-sm"></div></div>}
+                {template.id === 'classic' && <div className="w-10/12 h-10/12 bg-white border border-slate-200 rounded-sm p-1 space-y-2"><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-12 bg-slate-300 rounded-sm"></div></div>}
+                {template.id === 'modern' && <div className="w-10/12 h-10/12 flex space-x-1"><div className="w-1/3 h-full bg-slate-300 rounded-sm"></div><div className="w-2/3 h-full bg-white border border-slate-200 rounded-sm p-1 space-y-2"><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-6 bg-slate-300 rounded-sm"></div></div></div>}
+                {template.id === 'compact' && <div className="w-10/12 h-10/12 bg-white border border-slate-200 rounded-sm p-1 space-y-1 text-xs"><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-2 bg-slate-300 rounded-sm"></div></div>}
               </div>
-              <p className="text-sm font-semibold mt-2 text-center text-slate-200">{template.name}</p>
+              <p className="text-sm font-semibold mt-2 text-center text-slate-700">{template.name}</p>
             </button>
           ))}
         </div>

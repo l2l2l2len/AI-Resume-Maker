@@ -10,7 +10,7 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
   const TitleContent = () => (
     <div className="flex items-center space-x-3">
        <svg
-        className="w-8 h-8 text-blue-400"
+        className="w-8 h-8 text-blue-500"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -24,19 +24,19 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
         />
       </svg>
       <h1 className="text-2xl font-bold gradient-text">
-        AI Resume Maker
+        Resume Maker
       </h1>
     </div>
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/50 backdrop-blur-lg border-b border-slate-700/50">
+    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-slate-200">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex-1 flex justify-start">
           {onHomeClick && (
             <button
               onClick={onHomeClick}
-              className="flex items-center space-x-2 text-slate-300 hover:text-white transition-colors"
+              className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
               aria-label="Back to Homepage"
             >
               <BackIcon />
@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
           {onResetResume && (
             <button
               onClick={onResetResume}
-              className="flex items-center space-x-2 text-slate-300 hover:text-white transition-colors"
+              className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
               aria-label="Start New Resume"
             >
               <NewFileIcon />

@@ -7,16 +7,15 @@ interface HomepageProps {
 }
 
 const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; children: React.ReactNode }> = ({ icon, title, children }) => (
-  <div className="group relative bg-slate-900/40 backdrop-blur-md p-6 rounded-lg shadow-2xl border border-slate-700/50 text-center transition-all duration-300 hover:border-blue-500/50 hover:-translate-y-2">
-    <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg"></div>
+  <div className="group bg-white p-6 rounded-lg shadow-sm border border-slate-200 text-center transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
     <div className="relative">
         <div className="flex justify-center items-center mb-4">
-          <div className="bg-slate-800/50 text-blue-400 rounded-full p-4 border border-slate-700/50">
+          <div className="bg-slate-100 text-blue-500 rounded-full p-4 border border-slate-200">
             {icon}
           </div>
         </div>
-        <h3 className="text-lg font-semibold text-slate-100 mb-2">{title}</h3>
-        <p className="text-sm text-slate-400">{children}</p>
+        <h3 className="text-lg font-semibold text-slate-800 mb-2">{title}</h3>
+        <p className="text-sm text-slate-600">{children}</p>
     </div>
   </div>
 );
@@ -25,18 +24,18 @@ const FeatureCard: React.FC<{ icon: React.ReactNode; title: string; children: Re
 export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
   return (
     <div className="text-center py-16 px-4">
-      <h1 className="text-4xl md:text-6xl font-extrabold text-slate-100 mb-4 tracking-tight">
+      <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 mb-4 tracking-tight">
         Build Your <span className="gradient-text">Job-Winning Resume</span>
       </h1>
-      <p className="max-w-3xl mx-auto text-lg text-slate-400 mb-10">
+      <p className="max-w-3xl mx-auto text-lg text-slate-600 mb-10">
         Craft a professional resume in minutes. Choose from multiple templates, see a live preview, and export to PDF to land your dream job faster.
       </p>
-      <Button onClick={onStart} className="px-8 py-3 text-lg font-bold shadow-lg shadow-purple-600/20 transform hover:scale-105">
+      <Button onClick={onStart} className="px-8 py-3 text-lg font-bold transform hover:scale-105">
         Get Started for Free
       </Button>
 
       <div className="mt-24">
-        <h2 className="text-3xl font-bold text-center mb-12 text-slate-100">Why Choose Resume Maker?</h2>
+        <h2 className="text-3xl font-bold text-center mb-12 text-slate-900">Why Choose Resume Maker?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
            <FeatureCard
              icon={<FileTextIcon />}
