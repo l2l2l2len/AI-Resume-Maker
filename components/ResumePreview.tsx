@@ -24,11 +24,11 @@ const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
 
 export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, template, onEdit }) => {
   const previewRef = useRef<HTMLDivElement>(null);
-  const [isExporting, setIsExporting] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
-  const handleExportPdf = async () => {
+  const handleDownloadPdf = async () => {
     if (!previewRef.current) return;
-    setIsExporting(true);
+    setIsDownloading(true);
     try {
       const canvas = await html2canvas(previewRef.current, {
         scale: 3,
@@ -62,10 +62,10 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
       pdf.save(fileName);
 
     } catch (error) {
-      console.error("Error exporting PDF:", error);
-      alert("Sorry, there was an error exporting the PDF. Please check the console for more details.");
+      console.error("Error downloading PDF:", error);
+      alert("Sorry, there was an error downloading the PDF. Please check the console for more details.");
     } finally {
-      setIsExporting(false);
+      setIsDownloading(false);
     }
   };
 
@@ -80,11 +80,11 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
                   <BackIcon /> Edit Details
               </Button>
               <Button 
-                onClick={handleExportPdf}
-                disabled={isExporting}
+                onClick={handleDownloadPdf}
+                disabled={isDownloading}
               >
-                {isExporting ? <SpinnerIcon /> : <DownloadIcon />}
-                {isExporting ? 'Exporting...' : 'Export PDF'}
+                {isDownloading ? <SpinnerIcon /> : <DownloadIcon />}
+                {isDownloading ? 'Downloading...' : 'Download PDF'}
               </Button>
           </div>
       </div>

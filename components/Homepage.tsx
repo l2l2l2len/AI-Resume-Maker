@@ -28,7 +28,7 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
         Build Your <span className="gradient-text">Job-Winning Resume</span>
       </h1>
       <p className="max-w-3xl mx-auto text-lg text-slate-600 mb-10">
-        Craft a professional resume in minutes. Choose from multiple templates, see a live preview, and export to PDF to land your dream job faster.
+        Craft a professional resume in minutes. Choose from multiple templates, see a live preview, and download as PDF to land your dream job faster.
       </p>
       <Button onClick={onStart} className="px-8 py-3 text-lg font-bold transform hover:scale-105">
         Get Started for Free
@@ -51,7 +51,7 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
            </FeatureCard>
            <FeatureCard
              icon={<DownloadIcon />}
-             title="Easy PDF Export"
+             title="Easy PDF Download"
            >
               Download a pixel-perfect PDF of your resume with a single click, ready for recruiters.
            </FeatureCard>
