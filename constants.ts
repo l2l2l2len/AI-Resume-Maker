@@ -22,6 +22,18 @@ export const INITIAL_RESUME_DATA: ResumeData = {
       ],
     },
   ],
+  internships: [],
+  projects: [
+    {
+      id: 'proj1',
+      name: 'Personal Portfolio Website',
+      link: 'yourportfolio.com',
+      bulletPoints: [
+        'Designed and built a responsive personal portfolio using React and Tailwind CSS.',
+        'Implemented a project gallery and a contact form.',
+      ],
+    }
+  ],
   education: [
     {
       id: 'edu1',
@@ -31,4 +43,5 @@ export const INITIAL_RESUME_DATA: ResumeData = {
     },
   ],
   skills: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js', 'UI/UX Design'],
+  customSections: [],
 };

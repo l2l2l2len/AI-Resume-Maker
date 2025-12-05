@@ -1,5 +1,5 @@
 import React from 'react';
-import { ResumeData, Experience, Education } from '../types';
+import { ResumeData, Experience, Education, Internship, Project, CustomSection } from '../types';
 import { SectionWrapper } from './ui/SectionWrapper';
 import { Input } from './ui/Input';
 import { Textarea } from './ui/Textarea';
@@ -69,6 +69,87 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
     onResumeDataChange('experience', newExperience);
   };
 
+  // --- Internship Handlers (New) ---
+  const handleInternshipChange = (index: number, field: keyof Internship, value: string | string[]) => {
+    const newInternships = [...resumeData.internships];
+    newInternships[index] = { ...newInternships[index], [field]: value };
+    onResumeDataChange('internships', newInternships);
+  };
+
+  const handleInternshipBulletChange = (intIndex: number, bulletIndex: number, value: string) => {
+    const newInternships = [...resumeData.internships];
+    newInternships[intIndex].bulletPoints[bulletIndex] = value;
+    onResumeDataChange('internships', newInternships);
+  };
+
+  const addInternship = () => {
+    const newInternship: Internship = {
+      id: `int${Date.now()}`,
+      company: '',
+      role: '',
+      date: '',
+      bulletPoints: [''],
+    };
+    onResumeDataChange('internships', [...resumeData.internships, newInternship]);
+  };
+
+  const removeInternship = (index: number) => {
+    const newInternships = resumeData.internships.filter((_, i) => i !== index);
+    onResumeDataChange('internships', newInternships);
+  };
+
+  const addInternshipBullet = (intIndex: number) => {
+    const newInternships = [...resumeData.internships];
+    newInternships[intIndex].bulletPoints.push('');
+    onResumeDataChange('internships', newInternships);
+  };
+
+  const removeInternshipBullet = (intIndex: number, bulletIndex: number) => {
+    const newInternships = [...resumeData.internships];
+    newInternships[intIndex].bulletPoints = newInternships[intIndex].bulletPoints.filter((_, i) => i !== bulletIndex);
+    onResumeDataChange('internships', newInternships);
+  };
+
+  // --- Project Handlers (New) ---
+  const handleProjectChange = (index: number, field: keyof Project, value: string | string[]) => {
+    const newProjects = [...resumeData.projects];
+    newProjects[index] = { ...newProjects[index], [field]: value };
+    onResumeDataChange('projects', newProjects);
+  };
+  
+  const handleProjectBulletChange = (projIndex: number, bulletIndex: number, value: string) => {
+    const newProjects = [...resumeData.projects];
+    newProjects[projIndex].bulletPoints[bulletIndex] = value;
+    onResumeDataChange('projects', newProjects);
+  };
+
+  const addProject = () => {
+    const newProject: Project = {
+      id: `proj${Date.now()}`,
+      name: '',
+      link: '',
+      bulletPoints: [''],
+    };
+    onResumeDataChange('projects', [...resumeData.projects, newProject]);
+  };
+
+  const removeProject = (index: number) => {
+    const newProjects = resumeData.projects.filter((_, i) => i !== index);
+    onResumeDataChange('projects', newProjects);
+  };
+  
+  const addProjectBullet = (projIndex: number) => {
+    const newProjects = [...resumeData.projects];
+    newProjects[projIndex].bulletPoints.push('');
+    onResumeDataChange('projects', newProjects);
+  };
+
+  const removeProjectBullet = (projIndex: number, bulletIndex: number) => {
+    const newProjects = [...resumeData.projects];
+    newProjects[projIndex].bulletPoints = newProjects[projIndex].bulletPoints.filter((_, i) => i !== bulletIndex);
+    onResumeDataChange('projects', newProjects);
+  };
+
   // --- Education Handlers ---
   const handleEducationChange = (index: number, field: keyof Education, value: string) => {
     const newEducation = [...resumeData.education];
@@ -93,10 +174,48 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
   
   // --- Skills Handler ---
   const handleSkillsChange = (value: string) => {
-    // Assuming skills are stored as a comma-separated string in the input
-    // and converted to an array of strings.
     onResumeDataChange('skills', value.split(',').map(skill => skill.trim()));
   };
+
+  // --- Custom Section Handlers (New) ---
+  const addCustomSection = () => {
+    const newCustomSection: CustomSection = {
+      id: `custom${Date.now()}`,
+      title: 'New Section',
+      bulletPoints: [''],
+    };
+    onResumeDataChange('customSections', [...resumeData.customSections, newCustomSection]);
+  };
+
+  const removeCustomSection = (index: number) => {
+    const newCustomSections = resumeData.customSections.filter((_, i) => i !== index);
+    onResumeDataChange('customSections', newCustomSections);
+  };
+  
+  const handleCustomSectionTitleChange = (index: number, value: string) => {
+    const newCustomSections = [...resumeData.customSections];
+    newCustomSections[index].title = value;
+    onResumeDataChange('customSections', newCustomSections);
+  };
+  
+  const handleCustomSectionBulletChange = (secIndex: number, bulletIndex: number, value: string) => {
+    const newCustomSections = [...resumeData.customSections];
+    newCustomSections[secIndex].bulletPoints[bulletIndex] = value;
+    onResumeDataChange('customSections', newCustomSections);
+  };
+
+  const addCustomSectionBullet = (secIndex: number) => {
+    const newCustomSections = [...resumeData.customSections];
+    newCustomSections[secIndex].bulletPoints.push('');
+    onResumeDataChange('customSections', newCustomSections);
+  };
+
+  const removeCustomSectionBullet = (secIndex: number, bulletIndex: number) => {
+    const newCustomSections = [...resumeData.customSections];
+    newCustomSections[secIndex].bulletPoints = newCustomSections[secIndex].bulletPoints.filter((_, i) => i !== bulletIndex);
+    onResumeDataChange('customSections', newCustomSections);
+  };
+
 
   return (
     <div className="space-y-8 pb-24">
@@ -167,6 +286,95 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
         </div>
       </SectionWrapper>
 
+      {/* Internships (New) */}
+      <SectionWrapper title="Internships">
+        <div className="space-y-6">
+          {resumeData.internships.map((internship, index) => (
+            <div key={internship.id} className="p-4 border border-slate-200 rounded-md space-y-4 bg-slate-50">
+              <div className="flex justify-between items-center">
+                <h3 className="font-semibold text-slate-700">Internship #{index + 1}</h3>
+                <Button variant="secondary" onClick={() => removeInternship(index)} aria-label="Remove Internship">
+                  <TrashIcon />
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input label="Company" value={internship.company} onChange={(e) => handleInternshipChange(index, 'company', e.target.value)} />
+                <Input label="Role" value={internship.role} onChange={(e) => handleInternshipChange(index, 'role', e.target.value)} />
+                <Input label="Date" value={internship.date} onChange={(e) => handleInternshipChange(index, 'date', e.target.value)} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">Key Responsibilities</label>
+                <div className="space-y-2">
+                  {internship.bulletPoints.map((point, bulletIndex) => (
+                    <div key={bulletIndex} className="flex items-center gap-2">
+                      <Textarea
+                        id={`intern-${index}-bullet-${bulletIndex}`}
+                        className="flex-grow"
+                        rows={2}
+                        value={point}
+                        onChange={(e) => handleInternshipBulletChange(index, bulletIndex, e.target.value)}
+                        placeholder={`Responsibility #${bulletIndex + 1}`}
+                      />
+                      <Button variant="secondary" onClick={() => removeInternshipBullet(index, bulletIndex)} aria-label="Remove Bullet Point">
+                        <TrashIcon />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button variant="secondary" onClick={() => addInternshipBullet(index)}>
+                    <PlusIcon /> Add Bullet Point
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+          <Button onClick={addInternship}><PlusIcon /> Add Internship</Button>
+        </div>
+      </SectionWrapper>
+
+      {/* Projects (New) */}
+      <SectionWrapper title="Projects">
+        <div className="space-y-6">
+          {resumeData.projects.map((project, index) => (
+            <div key={project.id} className="p-4 border border-slate-200 rounded-md space-y-4 bg-slate-50">
+              <div className="flex justify-between items-center">
+                <h3 className="font-semibold text-slate-700">Project #{index + 1}</h3>
+                <Button variant="secondary" onClick={() => removeProject(index)} aria-label="Remove Project">
+                  <TrashIcon />
+                </Button>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input label="Project Name" value={project.name} onChange={(e) => handleProjectChange(index, 'name', e.target.value)} />
+                <Input label="Project Link" value={project.link} onChange={(e) => handleProjectChange(index, 'link', e.target.value)} />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">Description / Key Features</label>
+                <div className="space-y-2">
+                  {project.bulletPoints.map((point, bulletIndex) => (
+                    <div key={bulletIndex} className="flex items-center gap-2">
+                      <Textarea
+                        id={`project-${index}-bullet-${bulletIndex}`}
+                        className="flex-grow"
+                        rows={2}
+                        value={point}
+                        onChange={(e) => handleProjectBulletChange(index, bulletIndex, e.target.value)}
+                        placeholder={`Description #${bulletIndex + 1}`}
+                      />
+                      <Button variant="secondary" onClick={() => removeProjectBullet(index, bulletIndex)} aria-label="Remove Bullet Point">
+                        <TrashIcon />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button variant="secondary" onClick={() => addProjectBullet(index)}>
+                    <PlusIcon /> Add Bullet Point
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+          <Button onClick={addProject}><PlusIcon /> Add Project</Button>
+        </div>
+      </SectionWrapper>
+
       {/* Education */}
       <SectionWrapper title="Education">
         <div className="space-y-4">
@@ -181,7 +389,6 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Input label="Institution" value={edu.institution} onChange={(e) => handleEducationChange(index, 'institution', e.target.value)} />
                 <Input label="Degree" value={edu.degree} onChange={(e) => handleEducationChange(index, 'degree', e.target.value)} />
-                {/* Fix: Corrected typo from e.g.target.value to e.target.value */}
                 <Input label="Date (e.g., Sep 2016 - May 2020)" value={edu.date} onChange={(e) => handleEducationChange(index, 'date', e.target.value)} />
               </div>
             </div>
@@ -199,6 +406,54 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
           placeholder="e.g., React, TypeScript, UI/UX Design"
         />
       </SectionWrapper>
+
+      {/* Custom Sections (New) */}
+      {resumeData.customSections.map((section, index) => (
+        <SectionWrapper key={section.id} title={section.title}>
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                  <Input 
+                      label="Section Title"
+                      value={section.title}
+                      onChange={(e) => handleCustomSectionTitleChange(index, e.target.value)}
+                      className="font-semibold !text-lg"
+                  />
+                  <Button variant="secondary" onClick={() => removeCustomSection(index)} aria-label="Remove Custom Section" className="mt-7">
+                      <TrashIcon />
+                  </Button>
+              </div>
+              
+              <label className="block text-sm font-medium text-slate-600 mb-1">Content</label>
+              <div className="space-y-2">
+                  {section.bulletPoints.map((point, bulletIndex) => (
+                      <div key={bulletIndex} className="flex items-center gap-2">
+                          <Textarea
+                              id={`custom-${index}-bullet-${bulletIndex}`}
+                              className="flex-grow"
+                              rows={1}
+                              value={point}
+                              onChange={(e) => handleCustomSectionBulletChange(index, bulletIndex, e.target.value)}
+                              placeholder={`Item #${bulletIndex + 1}`}
+                          />
+                          <Button variant="secondary" onClick={() => removeCustomSectionBullet(index, bulletIndex)} aria-label="Remove Item">
+                              <TrashIcon />
+                          </Button>
+                      </div>
+                  ))}
+                  <Button variant="secondary" onClick={() => addCustomSectionBullet(index)}>
+                      <PlusIcon /> Add Item
+                  </Button>
+              </div>
+            </div>
+        </SectionWrapper>
+      ))}
+
+      <div className="text-center">
+        <Button onClick={addCustomSection} variant="secondary">
+          <PlusIcon /> Add Custom Section
+        </Button>
+      </div>
+
 
       {/* Navigation */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-slate-200 z-40">

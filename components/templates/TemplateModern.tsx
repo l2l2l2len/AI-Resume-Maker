@@ -6,7 +6,14 @@ interface TemplateProps {
 }
 
 export const TemplateModern = React.forwardRef<HTMLDivElement, TemplateProps>(({ resumeData }, ref) => {
-  const { personalInfo, summary, experience, education, skills } = resumeData;
+  const { personalInfo, summary, experience, internships, projects, education, skills, customSections } = resumeData;
+
+  const MainSection = ({ title, children }: { title: string, children: React.ReactNode }) => (
+    <section className="mb-6">
+      <h2 className="text-lg font-bold uppercase tracking-wider text-slate-800 mb-2">{title}</h2>
+      {children}
+    </section>
+  );
 
   return (
     <div ref={ref} className="flex min-h-full font-sans" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>
@@ -51,30 +58,83 @@ export const TemplateModern = React.forwardRef<HTMLDivElement, TemplateProps>(({
 
       {/* Right Column */}
       <main className="w-2/3 p-8 bg-white text-slate-800">
-        <section className="mb-6">
-          <h2 className="text-lg font-bold uppercase tracking-wider text-slate-800 mb-2">Summary</h2>
-          <p className="text-sm text-slate-700 text-justify">{summary}</p>
-        </section>
+        {summary && (
+          <MainSection title="Summary">
+            <p className="text-sm text-slate-700 text-justify">{summary}</p>
+          </MainSection>
+        )}
 
-        <section>
-          <h2 className="text-lg font-bold uppercase tracking-wider text-slate-800 mb-2">Experience</h2>
-          <div className="space-y-4">
-            {experience.map((exp) => (
-              <div key={exp.id}>
-                <div className="flex justify-between items-baseline">
-                  <h3 className="font-semibold text-slate-900 text-md">{exp.role}</h3>
-                  <span className="text-xs font-medium text-slate-500">{exp.date}</span>
+        {experience && experience.length > 0 && (
+          <MainSection title="Experience">
+            <div className="space-y-4">
+              {experience.map((exp) => (
+                <div key={exp.id}>
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="font-semibold text-slate-900 text-md">{exp.role}</h3>
+                    <span className="text-xs font-medium text-slate-500">{exp.date}</span>
+                  </div>
+                  <h4 className="text-sm font-medium text-slate-600 mb-1">{exp.company}</h4>
+                  <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
+                    {exp.bulletPoints.map((point, index) => (
+                      <li key={index}>{point}</li>
+                    ))}
+                  </ul>
                 </div>
-                <h4 className="text-sm font-medium text-slate-600 mb-1">{exp.company}</h4>
-                <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
-                  {exp.bulletPoints.map((point, index) => (
-                    <li key={index}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
+              ))}
+            </div>
+          </MainSection>
+        )}
+
+        {internships && internships.length > 0 && (
+          <MainSection title="Internships">
+            <div className="space-y-4">
+              {internships.map((internship) => (
+                <div key={internship.id}>
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="font-semibold text-slate-900 text-md">{internship.role}</h3>
+                    <span className="text-xs font-medium text-slate-500">{internship.date}</span>
+                  </div>
+                  <h4 className="text-sm font-medium text-slate-600 mb-1">{internship.company}</h4>
+                  <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
+                    {internship.bulletPoints.map((point, index) => (
+                      <li key={index}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </MainSection>
+        )}
+
+        {projects && projects.length > 0 && (
+          <MainSection title="Projects">
+            <div className="space-y-4">
+              {projects.map((project) => (
+                <div key={project.id}>
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="font-semibold text-slate-900 text-md">{project.name}</h3>
+                    {project.link && <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-xs font-medium text-blue-600 hover:underline">{project.link}</a>}
+                  </div>
+                  <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
+                    {project.bulletPoints.map((point, index) => (
+                      <li key={index}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </MainSection>
+        )}
+
+        {customSections && customSections.map((section) => (
+          section.title && <MainSection key={section.id} title={section.title}>
+            <ul className="list-disc list-inside space-y-1 text-slate-700 text-sm">
+              {section.bulletPoints.map((point, index) => (
+                point && <li key={index}>{point}</li>
+              ))}
+            </ul>
+          </MainSection>
+        ))}
       </main>
     </div>
   );
