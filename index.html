@@ -5,9 +5,85 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Resume Maker</title>
+
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kDXDCe9WSwszG/lcrcAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              primary: {
+                50: '#f0f5ff',
+                100: '#e0eaff',
+                200: '#c7d7fe',
+                300: '#a4bcfd',
+                400: '#8098f9',
+                500: '#667eea',
+                600: '#5a67d8',
+                700: '#4c51bf',
+                800: '#434190',
+                900: '#3c366b',
+              },
+              accent: {
+                50: '#fff1f2',
+                100: '#ffe4e6',
+                200: '#fecdd3',
+                300: '#fda4af',
+                400: '#fb7185',
+                500: '#e94560',
+                600: '#e11d48',
+                700: '#be123c',
+                800: '#9f1239',
+                900: '#881337',
+              },
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out',
+              'slide-up': 'slideUp 0.5s ease-out',
+              'slide-down': 'slideDown 0.3s ease-out',
+              'scale-in': 'scaleIn 0.3s ease-out',
+              'pulse-soft': 'pulseSoft 2s infinite',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              slideDown: {
+                '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              scaleIn: {
+                '0%': { opacity: '0', transform: 'scale(0.95)' },
+                '100%': { opacity: '1', transform: 'scale(1)' },
+              },
+              pulseSoft: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.7' },
+              },
+            },
+          },
+        },
+      }
+    </script>
+
   <script type="importmap">
 {
   "imports": {
@@ -20,18 +96,141 @@
 </script>
 <style>
   :root {
-    --gradient-1: #BDE0FE; /* Light Blue from image */
-    --gradient-2: #FFD6A5; /* Peach/Orange from image */
+    /* Primary gradient colors */
+    --primary-start: #667eea;
+    --primary-end: #764ba2;
+
+    /* Accent colors */
+    --accent-start: #e94560;
+    --accent-end: #ff6b6b;
+
+    /* Background gradients */
+    --bg-light: #f8fafc;
+    --bg-medium: #f1f5f9;
+
+    /* Success, Warning, Error */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+  }
+
+  * {
+    font-family: 'Inter', system-ui, sans-serif;
   }
 
   body {
-    background-color: #f8fafc; /* Tailwind's slate-50 */
+    background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-medium) 100%);
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   }
 
   .gradient-text {
-    background: linear-gradient(45deg, var(--gradient-1), var(--gradient-2));
+    background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-accent {
+    background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .btn-gradient {
+    background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  }
+
+  .btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  }
+
+  .btn-gradient-accent {
+    background: linear-gradient(135deg, var(--accent-start) 0%, var(--accent-end) 100%);
+    box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+  }
+
+  .btn-gradient-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(233, 69, 96, 0.5);
+  }
+
+  .card-3d {
+    background: white;
+    border-radius: 16px;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.05),
+      0 10px 20px -5px rgba(0, 0, 0, 0.1),
+      0 0 0 1px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+  }
+
+  .card-3d:hover {
+    box-shadow:
+      0 8px 12px -2px rgba(0, 0, 0, 0.08),
+      0 20px 40px -10px rgba(0, 0, 0, 0.15),
+      0 0 0 1px rgba(0, 0, 0, 0.03);
+    transform: translateY(-4px);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .input-focus-ring {
+    transition: all 0.2s ease;
+  }
+
+  .input-focus-ring:focus {
+    border-color: var(--primary-start);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    outline: none;
+  }
+
+  /* Smooth scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #cbd5e1, #94a3b8);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #94a3b8, #64748b);
+  }
+
+  /* Toast animation */
+  @keyframes toastSlideIn {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .toast-enter {
+    animation: toastSlideIn 0.3s ease-out;
   }
 </style>
 </head>

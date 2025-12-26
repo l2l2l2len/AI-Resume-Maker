@@ -8,9 +8,27 @@ import { isApiConfigured } from './services/geminiService';
 import { INITIAL_RESUME_DATA } from './constants';
 import { TemplateSelector } from './components/TemplateSelector';
 import { ConfigError } from './components/ConfigError';
+import { ProgressBar, TemplateIcon, FormIcon, PreviewIcon } from './components/ui/ProgressBar';
+import { AutoSaveIndicator } from './components/ui/AutoSaveIndicator';
 
 export type Template = 'classic' | 'modern' | 'compact' | '3d';
 export type Step = 'homepage' | 'template' | 'form' | 'preview';
+
+// Progress steps configuration
+const STEPS = [
+  { id: 'template', label: 'Template', icon: <TemplateIcon /> },
+  { id: 'form', label: 'Details', icon: <FormIcon /> },
+  { id: 'preview', label: 'Preview', icon: <PreviewIcon /> },
+];
+
+const getStepIndex = (step: Step): number => {
+  switch (step) {
+    case 'template': return 0;
+    case 'form': return 1;
+    case 'preview': return 2;
+    default: return -1;
+  }
+};
 
 const App: React.FC = () => {
   if (!isApiConfigured) {
@@ -18,7 +36,9 @@ const App: React.FC = () => {
   }
 
   const [step, setStep] = useState<Step>('homepage');
-  
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
+
   const [resumeData, setResumeData] = useState<ResumeData>(() => {
     try {
       const savedData = localStorage.getItem('resumeData');
@@ -38,8 +58,16 @@ const App: React.FC = () => {
     return savedTemplate || 'classic';
   });
 
+  // Auto-save with debounce
   useEffect(() => {
-    localStorage.setItem('resumeData', JSON.stringify(resumeData));
+    setIsSaving(true);
+    const timeoutId = setTimeout(() => {
+      localStorage.setItem('resumeData', JSON.stringify(resumeData));
+      setLastSaved(new Date());
+      setIsSaving(false);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
   }, [resumeData]);
 
   useEffect(() => {
@@ -59,7 +87,7 @@ const App: React.FC = () => {
       [section]: data,
     }));
   };
-  
+
   const handleResetResume = () => {
     if (window.confirm("Are you sure you want to start a new resume? All current data will be lost.")) {
       setResumeData(INITIAL_RESUME_DATA);
@@ -69,13 +97,22 @@ const App: React.FC = () => {
     }
   };
 
+  const handleStepClick = (stepIndex: number) => {
+    const stepMap: Step[] = ['template', 'form', 'preview'];
+    setStep(stepMap[stepIndex]);
+  };
+
+  const currentStepIndex = getStepIndex(step);
+  const showProgressBar = step !== 'homepage';
+  const showAutoSave = step === 'form';
+
   const renderStep = () => {
     switch(step) {
       case 'homepage':
         return <Homepage onStart={() => setStep('template')} />;
       case 'template':
         return (
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto animate-fade-in">
             <TemplateSelector
               selectedTemplate={selectedTemplate}
               onSelectTemplate={setSelectedTemplate}
@@ -85,22 +122,26 @@ const App: React.FC = () => {
         );
       case 'form':
         return (
-          <ResumeForm
-            resumeData={resumeData}
-            onResumeDataChange={handleResumeDataChange}
-            jobDescription={jobDescription}
-            onJobDescriptionChange={setJobDescription}
-            onPreview={() => setStep('preview')}
-            onBack={() => setStep('template')}
-          />
+          <div className="animate-fade-in">
+            <ResumeForm
+              resumeData={resumeData}
+              onResumeDataChange={handleResumeDataChange}
+              jobDescription={jobDescription}
+              onJobDescriptionChange={setJobDescription}
+              onPreview={() => setStep('preview')}
+              onBack={() => setStep('template')}
+            />
+          </div>
         );
       case 'preview':
         return (
-          <ResumePreview
-            resumeData={resumeData}
-            template={selectedTemplate}
-            onEdit={() => setStep('form')}
-          />
+          <div className="animate-fade-in">
+            <ResumePreview
+              resumeData={resumeData}
+              template={selectedTemplate}
+              onEdit={() => setStep('form')}
+            />
+          </div>
         );
       default:
         return <Homepage onStart={() => setStep('template')} />;
@@ -109,11 +150,32 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen text-slate-800 font-sans">
-      <Header 
+      <Header
         onHomeClick={step !== 'homepage' ? () => setStep('homepage') : undefined}
         onResetResume={step !== 'homepage' ? handleResetResume : undefined}
       />
+
       <main className="container mx-auto px-4 py-8">
+        {/* Progress Bar */}
+        {showProgressBar && (
+          <div className="mb-8 animate-slide-down">
+            <div className="flex justify-between items-center mb-4">
+              <ProgressBar
+                steps={STEPS}
+                currentStep={currentStepIndex}
+                onStepClick={handleStepClick}
+              />
+            </div>
+
+            {/* Auto-save indicator */}
+            {showAutoSave && (
+              <div className="flex justify-end">
+                <AutoSaveIndicator isSaving={isSaving} lastSaved={lastSaved} />
+              </div>
+            )}
+          </div>
+        )}
+
         {renderStep()}
       </main>
     </div>
