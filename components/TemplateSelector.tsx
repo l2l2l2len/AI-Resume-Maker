@@ -13,6 +13,7 @@ const templates: { id: Template, name: string }[] = [
   { id: 'classic', name: 'Classic' },
   { id: 'modern', name: 'Modern' },
   { id: 'compact', name: 'Compact' },
+  { id: '3d', name: '3D Depth' },
 ];
 
 export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ selectedTemplate, onSelectTemplate, onNext }) => {
@@ -36,6 +37,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({ selectedTemp
                 {template.id === 'classic' && <div className="w-10/12 h-10/12 bg-white border border-slate-200 rounded-sm p-1 space-y-2"><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-12 bg-slate-300 rounded-sm"></div></div>}
                 {template.id === 'modern' && <div className="w-10/12 h-10/12 flex space-x-1"><div className="w-1/3 h-full bg-slate-300 rounded-sm"></div><div className="w-2/3 h-full bg-white border border-slate-200 rounded-sm p-1 space-y-2"><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-6 bg-slate-300 rounded-sm"></div></div></div>}
                 {template.id === 'compact' && <div className="w-10/12 h-10/12 bg-white border border-slate-200 rounded-sm p-1 space-y-1 text-xs"><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-2 bg-slate-300 rounded-sm"></div><div className="h-2 bg-slate-300 rounded-sm"></div></div>}
+                {template.id === '3d' && <div className="w-10/12 h-10/12 rounded-sm p-1 relative" style={{background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)'}}><div className="absolute top-1 left-1 right-1 h-5 rounded-sm" style={{background: 'linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'}}></div><div className="flex mt-6 gap-1"><div className="w-1/3 space-y-1"><div className="h-4 bg-white rounded-sm" style={{boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}></div><div className="h-3 bg-white rounded-sm" style={{boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}></div></div><div className="w-2/3 space-y-1"><div className="h-8 bg-white rounded-sm" style={{boxShadow: '0 2px 4px rgba(0,0,0,0.1)'}}></div></div></div></div>}
               </div>
               <p className="text-sm font-semibold mt-2 text-center text-slate-700">{template.name}</p>
             </button>
