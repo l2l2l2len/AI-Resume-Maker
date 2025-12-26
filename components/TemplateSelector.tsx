@@ -51,6 +51,22 @@ const templates: TemplateInfo[] = [
     accentColor: '#e94560',
     shadowColor: 'rgba(233, 69, 96, 0.4)',
   },
+  {
+    id: 'ats',
+    name: 'ATS Simple',
+    description: 'Clean, minimal format optimized for applicant tracking systems',
+    gradient: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
+    accentColor: '#374151',
+    shadowColor: 'rgba(55, 65, 81, 0.4)',
+  },
+  {
+    id: 'ats-pro',
+    name: 'ATS Pro',
+    description: 'Professional ATS-friendly design with subtle styling',
+    gradient: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+    accentColor: '#2563eb',
+    shadowColor: 'rgba(37, 99, 235, 0.4)',
+  },
 ];
 
 // Template preview components
@@ -127,6 +143,50 @@ const Depth3DPreview: React.FC = () => (
   </div>
 );
 
+const ATSPreview: React.FC = () => (
+  <div className="w-full h-full bg-white rounded-lg p-2 space-y-1.5">
+    {/* Simple header */}
+    <div className="text-center pb-1 border-b border-gray-300">
+      <div className="h-3 bg-gray-800 rounded w-1/2 mx-auto mb-1" />
+      <div className="h-1.5 bg-gray-300 rounded w-3/4 mx-auto" />
+    </div>
+    {/* Section */}
+    <div className="pt-1">
+      <div className="h-2 bg-gray-800 rounded w-1/3 mb-1 border-b border-gray-800" />
+      <div className="space-y-0.5">
+        <div className="h-1.5 bg-gray-200 rounded w-full" />
+        <div className="h-1.5 bg-gray-200 rounded w-5/6" />
+        <div className="h-1.5 bg-gray-200 rounded w-4/6" />
+      </div>
+    </div>
+  </div>
+);
+
+const ATSProPreview: React.FC = () => (
+  <div className="w-full h-full bg-white rounded-lg p-2">
+    {/* Header with accent */}
+    <div className="pb-1.5 mb-1.5 border-b-2 border-blue-600">
+      <div className="h-3 bg-slate-700 rounded w-2/3 mb-1" />
+      <div className="flex gap-1">
+        <div className="h-1.5 bg-gray-300 rounded w-1/4" />
+        <div className="h-1.5 bg-gray-300 rounded w-1/4" />
+      </div>
+    </div>
+    {/* Skills pills */}
+    <div className="flex gap-1 mb-1.5 flex-wrap">
+      <div className="h-2 bg-blue-100 rounded-full w-8" />
+      <div className="h-2 bg-blue-100 rounded-full w-6" />
+      <div className="h-2 bg-blue-100 rounded-full w-10" />
+    </div>
+    {/* Section */}
+    <div className="h-1.5 bg-blue-600 rounded w-1/3 mb-1" />
+    <div className="space-y-0.5">
+      <div className="h-1.5 bg-gray-200 rounded w-full" />
+      <div className="h-1.5 bg-gray-200 rounded w-5/6" />
+    </div>
+  </div>
+);
+
 const getPreviewComponent = (id: Template) => {
   switch (id) {
     case 'classic':
@@ -137,6 +197,10 @@ const getPreviewComponent = (id: Template) => {
       return <CompactPreview />;
     case '3d':
       return <Depth3DPreview />;
+    case 'ats':
+      return <ATSPreview />;
+    case 'ats-pro':
+      return <ATSProPreview />;
     default:
       return <ClassicPreview />;
   }

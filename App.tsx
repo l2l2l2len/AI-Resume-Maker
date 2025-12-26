@@ -11,7 +11,7 @@ import { ConfigError } from './components/ConfigError';
 import { ProgressBar, TemplateIcon, FormIcon, PreviewIcon } from './components/ui/ProgressBar';
 import { AutoSaveIndicator } from './components/ui/AutoSaveIndicator';
 
-export type Template = 'classic' | 'modern' | 'compact' | '3d';
+export type Template = 'classic' | 'modern' | 'compact' | '3d' | 'ats' | 'ats-pro';
 export type Step = 'homepage' | 'template' | 'form' | 'preview';
 
 // Progress steps configuration
