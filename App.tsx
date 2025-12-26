@@ -9,7 +9,7 @@ import { INITIAL_RESUME_DATA } from './constants';
 import { TemplateSelector } from './components/TemplateSelector';
 import { ConfigError } from './components/ConfigError';
 
-export type Template = 'classic' | 'modern' | 'compact';
+export type Template = 'classic' | 'modern' | 'compact' | '3d';
 export type Step = 'homepage' | 'template' | 'form' | 'preview';
 
 const App: React.FC = () => {

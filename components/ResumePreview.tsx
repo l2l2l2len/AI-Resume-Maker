@@ -6,6 +6,7 @@ import { Template } from '../App';
 import { TemplateClassic } from './templates/TemplateClassic';
 import { TemplateModern } from './templates/TemplateModern';
 import { TemplateCompact } from './templates/TemplateCompact';
+import { Template3D } from './templates/Template3D';
 
 declare const html2canvas: any;
 declare const jspdf: { jsPDF: any };
@@ -20,6 +21,7 @@ const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
   classic: TemplateClassic,
   modern: TemplateModern,
   compact: TemplateCompact,
+  '3d': Template3D,
 };
 
 export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, template, onEdit }) => {
