@@ -9,55 +9,83 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) => {
   const TitleContent = () => (
     <div className="flex items-center space-x-3">
-       <svg
-        className="w-8 h-8 text-blue-500"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
+      {/* 3D Logo with gradient */}
+      <div
+        className="relative w-10 h-10 rounded-xl flex items-center justify-center transform transition-transform duration-300 hover:scale-110 hover:rotate-3"
+        style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          boxShadow: '0 8px 20px rgba(102, 126, 234, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
+        }}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-        />
-      </svg>
-      <h1 className="text-2xl font-bold gradient-text">
+        <svg
+          className="w-5 h-5 text-white"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+          />
+        </svg>
+      </div>
+      <h1
+        className="text-xl font-bold"
+        style={{
+          background: 'linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}
+      >
         Resume Maker
       </h1>
     </div>
   );
 
   return (
-    <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-slate-200">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+    <header
+      className="sticky top-0 z-50 border-b"
+      style={{
+        background: 'rgba(255,255,255,0.8)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderColor: 'rgba(0,0,0,0.05)',
+      }}
+    >
+      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex-1 flex justify-start">
           {onHomeClick && (
             <button
               onClick={onHomeClick}
-              className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
+              className="group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300"
+              style={{
+                background: 'rgba(0,0,0,0.03)',
+              }}
               aria-label="Back to Homepage"
             >
               <BackIcon />
-              <span className="hidden sm:inline">Home</span>
+              <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900">Home</span>
             </button>
           )}
         </div>
-        
+
         <div className="flex-1 flex justify-center">
-           <TitleContent />
+          <TitleContent />
         </div>
 
         <div className="flex-1 flex justify-end">
           {onResetResume && (
             <button
               onClick={onResetResume}
-              className="flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors"
+              className="group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-red-50"
               aria-label="Start New Resume"
             >
               <NewFileIcon />
-              <span className="hidden sm:inline">Start New</span>
+              <span className="text-sm font-medium text-slate-600 group-hover:text-red-600">Start New</span>
             </button>
           )}
         </div>
