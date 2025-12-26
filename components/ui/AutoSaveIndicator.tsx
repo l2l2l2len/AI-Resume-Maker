@@ -67,10 +67,10 @@ export const AutoSaveIndicator: React.FC<AutoSaveIndicatorProps> = ({
         flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium
         transition-all duration-300
         ${isSaving
-          ? 'bg-blue-50 text-blue-600'
+          ? 'bg-blue-500/20 text-blue-300'
           : showSaved
-            ? 'bg-green-50 text-green-600'
-            : 'bg-slate-100 text-slate-500'
+            ? 'bg-green-500/20 text-green-300'
+            : 'bg-white/10 text-white/60'
         }
       `}
     >
