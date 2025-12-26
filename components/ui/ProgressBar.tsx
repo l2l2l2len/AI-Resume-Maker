@@ -27,12 +27,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
     <div className="w-full max-w-3xl mx-auto mb-4 sm:mb-8">
       <div className="relative">
         {/* Progress Line Background */}
-        <div
-          className="absolute top-5 sm:top-6 left-0 right-0 h-0.5 sm:h-1 rounded-full mx-8 sm:mx-12"
-          style={{
-            background: isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)',
-          }}
-        />
+        <div className="absolute top-6 left-0 right-0 h-1 bg-white/20 rounded-full mx-12" />
 
         {/* Progress Line Fill */}
         <div
@@ -68,9 +63,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
                       ? 'text-white'
                       : isCurrent
                         ? 'text-white'
-                        : isLight
-                          ? 'bg-slate-200 border-2 border-slate-300 text-slate-400'
-                          : 'bg-white/10 border-2 border-white/20 text-white/50'
+                        : 'bg-white/10 border-2 border-white/20 text-white/50'
                     }
                   `}
                   style={
@@ -96,11 +89,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
                 {/* Step Label */}
                 <span
                   className={`
-                    mt-2 sm:mt-3 text-[10px] sm:text-xs font-medium transition-colors duration-300
-                    ${isCompleted || isCurrent
-                      ? isLight ? 'text-slate-800' : 'text-white'
-                      : isLight ? 'text-slate-400' : 'text-white/50'
-                    }
+                    mt-3 text-xs font-medium transition-colors duration-300
+                    ${isCompleted || isCurrent ? 'text-white' : 'text-white/50'}
                   `}
                 >
                   {step.label}

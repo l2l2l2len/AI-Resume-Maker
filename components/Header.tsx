@@ -80,6 +80,10 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
         borderColor: isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255,255,255,0.1)',
+        background: 'rgba(15, 15, 26, 0.85)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderColor: 'rgba(255,255,255,0.1)',
       }}
     >
       <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3 flex justify-between items-center">
@@ -93,6 +97,9 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
               }`}
               style={{
                 background: isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.05)',
+              className="group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-white/10"
+              style={{
+                background: 'rgba(255,255,255,0.05)',
               }}
               aria-label="Back to Homepage"
             >
@@ -106,6 +113,7 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
               >
                 Home
               </span>
+              <span className="text-sm font-medium text-slate-300 group-hover:text-white">Home</span>
             </button>
           )}
         </div>
@@ -140,6 +148,9 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
               }`}
               style={{
                 background: isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.05)',
+              className="group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-red-500/20"
+              style={{
+                background: 'rgba(255,255,255,0.05)',
               }}
               aria-label="Start New Resume"
             >
@@ -153,6 +164,7 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
               >
                 New
               </span>
+              <span className="text-sm font-medium text-slate-300 group-hover:text-red-400">Start New</span>
             </button>
           )}
         </div>
