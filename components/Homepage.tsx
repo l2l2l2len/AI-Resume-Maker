@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from './ui/Button';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface HomepageProps {
   onStart: () => void;
@@ -223,10 +224,10 @@ const GlassCard: React.FC<{ children: React.ReactNode; className?: string }> = (
 );
 
 // Step indicator component
-const StepIndicator: React.FC<{ number: number; title: string; description: string }> = ({ number, title, description }) => (
-  <div className="flex items-start gap-4 group">
+const StepIndicator: React.FC<{ number: number; title: string; description: string; isLight: boolean }> = ({ number, title, description, isLight }) => (
+  <div className="flex items-start gap-3 sm:gap-4 group">
     <div
-      className="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold text-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+      className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center text-white font-bold text-base sm:text-lg transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
       style={{
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         boxShadow: '0 8px 20px rgba(102, 126, 234, 0.4)',
@@ -235,24 +236,27 @@ const StepIndicator: React.FC<{ number: number; title: string; description: stri
       {number}
     </div>
     <div>
-      <h4 className="font-bold text-slate-800 mb-1">{title}</h4>
-      <p className="text-sm text-slate-600">{description}</p>
+      <h4 className={`font-bold mb-1 text-sm sm:text-base ${isLight ? 'text-slate-800' : 'text-white'}`}>{title}</h4>
+      <p className={`text-xs sm:text-sm ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>{description}</p>
     </div>
   </div>
 );
 
 export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+
   return (
     <div className="relative">
       {/* Hero Section with 3D Background */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden rounded-3xl mx-[-1rem] mt-[-2rem]">
+      <section className="relative min-h-[80vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl mx-[-0.75rem] sm:mx-[-1rem] mt-[-1rem] sm:mt-[-2rem]">
         <WaveBackground />
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center px-6 py-20 max-w-4xl mx-auto">
+        <div className="relative z-10 text-center px-4 sm:px-6 py-12 sm:py-20 max-w-4xl mx-auto">
           {/* Floating badge */}
           <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-6 sm:mb-8"
             style={{
               background: 'rgba(255,255,255,0.1)',
               backdropFilter: 'blur(10px)',
@@ -260,10 +264,10 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
             }}
           >
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-white/80 text-sm">Free & No Sign-up Required</span>
+            <span className="text-white/80 text-xs sm:text-sm">Free & No Sign-up Required</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-4 sm:mb-6 leading-tight">
             <span className="text-white">Build resumes</span>
             <br />
             <span
@@ -278,32 +282,33 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
             </span>
           </h1>
 
-          <p className="text-xl text-white/70 mb-10 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-xl text-white/70 mb-6 sm:mb-10 max-w-2xl mx-auto leading-relaxed">
             Professional resume builder with stunning templates, live preview, and instant PDF download.
             Land your dream job faster.
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
             <button
               onClick={onStart}
-              className="group px-8 py-4 rounded-2xl text-lg font-bold transition-all duration-300 transform hover:scale-105"
+              className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-bold transition-all duration-300 transform hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, #e94560 0%, #ff6b6b 100%)',
                 color: 'white',
                 boxShadow: '0 20px 40px rgba(233, 69, 96, 0.4), 0 0 0 0 rgba(233, 69, 96, 0.5)',
               }}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center justify-center gap-2">
                 Get Started Free
-                <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>
             </button>
 
             <button
-              className="px-8 py-4 rounded-2xl text-lg font-medium transition-all duration-300"
+              onClick={onStart}
+              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-medium transition-all duration-300"
               style={{
                 background: 'rgba(255,255,255,0.1)',
                 backdropFilter: 'blur(10px)',
@@ -316,21 +321,21 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
           </div>
 
           {/* Trust indicators */}
-          <div className="mt-12 flex flex-wrap justify-center gap-8 text-white/50 text-sm">
-            <span className="flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <div className="mt-8 sm:mt-12 flex flex-wrap justify-center gap-4 sm:gap-8 text-white/50 text-xs sm:text-sm">
+            <span className="flex items-center gap-1.5 sm:gap-2">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               ATS-Friendly
             </span>
-            <span className="flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <span className="flex items-center gap-1.5 sm:gap-2">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               100% Private
             </span>
-            <span className="flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <span className="flex items-center gap-1.5 sm:gap-2">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               No Watermarks
@@ -338,8 +343,8 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        {/* Scroll indicator - hidden on mobile */}
+        <div className="hidden sm:block absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <svg className="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
@@ -347,9 +352,9 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
       </section>
 
       {/* Features Section with 3D Cards */}
-      <section className="py-24">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-slate-900 mb-4">
+      <section className="py-12 sm:py-24">
+        <div className="text-center mb-8 sm:mb-16 px-4">
+          <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 ${isLight ? 'text-slate-900' : 'text-white'}`}>
             Everything you need to create
             <br />
             <span
@@ -363,12 +368,12 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
               the perfect resume
             </span>
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className={`text-sm sm:text-lg max-w-2xl mx-auto ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
             Powerful features designed to help you land your dream job faster
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-7xl mx-auto px-2">
           <FeatureCard3D
             title="Stunning Templates"
             description="Choose from Classic, Modern, Compact, or our new 3D Depth design. All ATS-optimized."
@@ -397,12 +402,12 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
       </section>
 
       {/* How It Works Section */}
-      <section className="py-24">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <section className="py-12 sm:py-24">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16 items-center">
             {/* Left: Steps */}
             <div>
-              <h2 className="text-4xl font-bold text-slate-900 mb-4">
+              <h2 className={`text-2xl sm:text-4xl font-bold mb-3 sm:mb-4 ${isLight ? 'text-slate-900' : 'text-white'}`}>
                 Create your resume in
                 <br />
                 <span
@@ -416,31 +421,34 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
                   3 simple steps
                 </span>
               </h2>
-              <p className="text-lg text-slate-600 mb-10">
+              <p className={`text-sm sm:text-lg mb-6 sm:mb-10 ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
                 No complicated processes. Just a smooth, intuitive experience.
               </p>
 
-              <div className="space-y-8">
+              <div className="space-y-5 sm:space-y-8">
                 <StepIndicator
                   number={1}
                   title="Choose a Template"
                   description="Select from our collection of professionally designed, ATS-friendly templates."
+                  isLight={isLight}
                 />
                 <StepIndicator
                   number={2}
                   title="Fill in Your Details"
                   description="Enter your information with our intuitive form. See live preview as you type."
+                  isLight={isLight}
                 />
                 <StepIndicator
                   number={3}
                   title="Download PDF"
                   description="Export your polished resume as a high-quality PDF, ready to send."
+                  isLight={isLight}
                 />
               </div>
             </div>
 
-            {/* Right: Visual */}
-            <div className="relative">
+            {/* Right: Visual - Hidden on mobile for cleaner layout */}
+            <div className="relative hidden lg:block">
               <GlassCard className="transform rotate-3 hover:rotate-0 transition-transform duration-500">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -502,9 +510,9 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24">
+      <section className="py-12 sm:py-24 px-4">
         <div
-          className="max-w-4xl mx-auto rounded-3xl p-12 text-center relative overflow-hidden"
+          className="max-w-4xl mx-auto rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center relative overflow-hidden"
           style={{
             background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
             boxShadow: '0 40px 80px rgba(0,0,0,0.3)',
@@ -512,7 +520,7 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
         >
           {/* Decorative orbs */}
           <div
-            className="absolute w-48 h-48 rounded-full opacity-20"
+            className="absolute w-32 sm:w-48 h-32 sm:h-48 rounded-full opacity-20"
             style={{
               background: 'radial-gradient(circle, #e94560 0%, transparent 70%)',
               top: '-10%',
@@ -520,7 +528,7 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
             }}
           />
           <div
-            className="absolute w-32 h-32 rounded-full opacity-15"
+            className="absolute w-24 sm:w-32 h-24 sm:h-32 rounded-full opacity-15"
             style={{
               background: 'radial-gradient(circle, #4facfe 0%, transparent 70%)',
               bottom: '10%',
@@ -529,24 +537,24 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
           />
 
           <div className="relative z-10">
-            <h2 className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-2xl sm:text-4xl font-bold text-white mb-3 sm:mb-4">
               Ready to build your resume?
             </h2>
-            <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
+            <p className="text-sm sm:text-lg text-white/70 mb-6 sm:mb-8 max-w-xl mx-auto">
               Join thousands who have already created professional resumes and landed their dream jobs.
             </p>
             <button
               onClick={onStart}
-              className="group px-10 py-4 rounded-2xl text-lg font-bold transition-all duration-300 transform hover:scale-105"
+              className="group w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-bold transition-all duration-300 transform hover:scale-105"
               style={{
                 background: 'linear-gradient(135deg, #e94560 0%, #ff6b6b 100%)',
                 color: 'white',
                 boxShadow: '0 20px 40px rgba(233, 69, 96, 0.4)',
               }}
             >
-              <span className="flex items-center gap-2">
+              <span className="flex items-center justify-center gap-2">
                 Start Building Now
-                <svg className="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </span>

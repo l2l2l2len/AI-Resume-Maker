@@ -7,6 +7,8 @@ import { TemplateClassic } from './templates/TemplateClassic';
 import { TemplateModern } from './templates/TemplateModern';
 import { TemplateCompact } from './templates/TemplateCompact';
 import { Template3D } from './templates/Template3D';
+import { TemplateATS } from './templates/TemplateATS';
+import { TemplateATSPro } from './templates/TemplateATSPro';
 
 declare const html2canvas: any;
 declare const jspdf: { jsPDF: any };
@@ -22,6 +24,8 @@ const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
   modern: TemplateModern,
   compact: TemplateCompact,
   '3d': Template3D,
+  'ats': TemplateATS,
+  'ats-pro': TemplateATSPro,
 };
 
 export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, template, onEdit }) => {
