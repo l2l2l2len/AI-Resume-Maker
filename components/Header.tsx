@@ -76,10 +76,10 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
     <header
       className="sticky top-0 z-50 border-b transition-colors duration-300"
       style={{
-        background: isLight ? 'rgba(255, 255, 255, 0.9)' : 'rgba(15, 15, 26, 0.85)',
+        background: 'rgba(15, 15, 26, 0.85)',
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
-        borderColor: isLight ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255,255,255,0.1)',
+        borderColor: 'rgba(255,255,255,0.1)',
       }}
     >
       <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3 flex justify-between items-center">
@@ -88,24 +88,14 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
           {onHomeClick && (
             <button
               onClick={onHomeClick}
-              className={`group flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg sm:rounded-xl transition-all duration-300 ${
-                isLight ? 'hover:bg-slate-100' : 'hover:bg-white/10'
-              }`}
+              className="group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-white/10"
               style={{
-                background: isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.05)',
+                background: 'rgba(255,255,255,0.05)',
               }}
               aria-label="Back to Homepage"
             >
               <BackIcon />
-              <span
-                className={`text-xs sm:text-sm font-medium hidden sm:inline ${
-                  isLight
-                    ? 'text-slate-600 group-hover:text-slate-900'
-                    : 'text-slate-300 group-hover:text-white'
-                }`}
-              >
-                Home
-              </span>
+              <span className="text-sm font-medium text-slate-300 group-hover:text-white">Home</span>
             </button>
           )}
         </div>
@@ -135,24 +125,14 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
           {onResetResume && (
             <button
               onClick={onResetResume}
-              className={`group flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-2 rounded-lg sm:rounded-xl transition-all duration-300 ${
-                isLight ? 'hover:bg-red-50' : 'hover:bg-red-500/20'
-              }`}
+              className="group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-red-500/20"
               style={{
-                background: isLight ? 'rgba(0,0,0,0.03)' : 'rgba(255,255,255,0.05)',
+                background: 'rgba(255,255,255,0.05)',
               }}
               aria-label="Start New Resume"
             >
               <NewFileIcon />
-              <span
-                className={`text-xs sm:text-sm font-medium hidden sm:inline ${
-                  isLight
-                    ? 'text-slate-600 group-hover:text-red-600'
-                    : 'text-slate-300 group-hover:text-red-400'
-                }`}
-              >
-                New
-              </span>
+              <span className="text-sm font-medium text-slate-300 group-hover:text-red-400">Start New</span>
             </button>
           )}
         </div>
