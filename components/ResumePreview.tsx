@@ -37,19 +37,32 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
 
   const handleDownloadPdf = async () => {
     if (!previewRef.current) return;
+
+    // Check if libraries are loaded
+    if (typeof html2canvas === 'undefined') {
+      alert("PDF library (html2canvas) is not loaded. Please refresh the page and try again.");
+      return;
+    }
+    if (typeof jspdf === 'undefined' || !jspdf.jsPDF) {
+      alert("PDF library (jsPDF) is not loaded. Please refresh the page and try again.");
+      return;
+    }
+
     setIsDownloading(true);
     try {
       const canvas = await html2canvas(previewRef.current, {
-        scale: 3,
+        scale: 2,
         useCORS: true,
-        backgroundColor: '#ffffff', // Set a solid background for PDF
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
       });
 
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      
+
       const canvasAspectRatio = canvas.width / canvas.height;
       const pageAspectRatio = pdfWidth / pdfHeight;
 
@@ -61,18 +74,18 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
           finalHeight = pdfHeight;
           finalWidth = pdfHeight * canvasAspectRatio;
       }
-      
+
       const x = (pdfWidth - finalWidth) / 2;
       const y = 0;
 
       pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
-      
-      const fileName = `${resumeData.personalInfo.name.replace(/\s+/g, '_')}_Resume.pdf`;
+
+      const fileName = `${resumeData.personalInfo.name.replace(/\s+/g, '_') || 'Resume'}_Resume.pdf`;
       pdf.save(fileName);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error downloading PDF:", error);
-      alert("Sorry, there was an error downloading the PDF. Please check the console for more details.");
+      alert(`Error generating PDF: ${error.message || 'Unknown error'}. Please try again.`);
     } finally {
       setIsDownloading(false);
     }
