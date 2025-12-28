@@ -12,7 +12,7 @@ import { ProgressBar, TemplateIcon, FormIcon, PreviewIcon } from './components/u
 import { AutoSaveIndicator } from './components/ui/AutoSaveIndicator';
 import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 
-export type Template = 'classic' | 'modern' | 'compact' | '3d' | 'ats' | 'ats-pro';
+export type Template = 'classic' | 'modern' | 'compact' | 'ats' | 'ats-pro';
 export type Step = 'homepage' | 'template' | 'form' | 'preview';
 
 // Progress steps configuration

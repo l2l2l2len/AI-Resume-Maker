@@ -6,7 +6,6 @@ import { Template } from '../App';
 import { TemplateClassic } from './templates/TemplateClassic';
 import { TemplateModern } from './templates/TemplateModern';
 import { TemplateCompact } from './templates/TemplateCompact';
-import { Template3D } from './templates/Template3D';
 import { TemplateATS } from './templates/TemplateATS';
 import { TemplateATSPro } from './templates/TemplateATSPro';
 import { useTheme } from '../contexts/ThemeContext';
@@ -24,7 +23,6 @@ const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
   classic: TemplateClassic,
   modern: TemplateModern,
   compact: TemplateCompact,
-  '3d': Template3D,
   'ats': TemplateATS,
   'ats-pro': TemplateATSPro,
 };

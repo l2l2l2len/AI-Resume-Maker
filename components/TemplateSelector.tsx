@@ -45,14 +45,6 @@ const templates: TemplateInfo[] = [
     shadowColor: 'rgba(245, 87, 108, 0.4)',
   },
   {
-    id: '3d',
-    name: '3D Depth',
-    description: 'Stunning layered design with modern depth effects',
-    gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-    accentColor: '#e94560',
-    shadowColor: 'rgba(233, 69, 96, 0.4)',
-  },
-  {
     id: 'ats',
     name: 'ATS Simple',
     description: 'Clean, minimal format optimized for applicant tracking systems',
@@ -109,41 +101,6 @@ const CompactPreview: React.FC = () => (
   </div>
 );
 
-const Depth3DPreview: React.FC = () => (
-  <div
-    className="w-full h-full rounded-lg p-2 relative overflow-hidden"
-    style={{ background: 'linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)' }}
-  >
-    {/* Header bar */}
-    <div
-      className="h-8 rounded-md mb-2"
-      style={{
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%)',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-      }}
-    />
-    {/* Content cards */}
-    <div className="flex gap-1.5">
-      <div className="w-1/3 space-y-1.5">
-        <div
-          className="h-6 bg-white rounded-md"
-          style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
-        />
-        <div
-          className="h-5 bg-white rounded-md"
-          style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
-        />
-      </div>
-      <div className="w-2/3">
-        <div
-          className="h-full bg-white rounded-md"
-          style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}
-        />
-      </div>
-    </div>
-  </div>
-);
-
 const ATSPreview: React.FC = () => (
   <div className="w-full h-full bg-white rounded-lg p-2 space-y-1.5">
     {/* Simple header */}
@@ -196,8 +153,6 @@ const getPreviewComponent = (id: Template) => {
       return <ModernPreview />;
     case 'compact':
       return <CompactPreview />;
-    case '3d':
-      return <Depth3DPreview />;
     case 'ats':
       return <ATSPreview />;
     case 'ats-pro':
