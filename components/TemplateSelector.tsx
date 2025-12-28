@@ -2,6 +2,7 @@ import React from 'react';
 import { Template } from '../App';
 import { SectionWrapper } from './ui/SectionWrapper';
 import { Button } from './ui/Button';
+import { useTheme } from '../contexts/ThemeContext';
 
 interface TemplateSelectorProps {
   selectedTemplate: Template;
@@ -211,11 +212,14 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   onSelectTemplate,
   onNext,
 }) => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto px-2 sm:px-0">
       {/* Header */}
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-slate-900 mb-3">
+      <div className="text-center mb-6 sm:mb-12">
+        <h2 className={`text-2xl sm:text-4xl font-bold mb-2 sm:mb-3 ${isLight ? 'text-slate-900' : 'text-white'}`}>
           Choose Your
           <span
             className="ml-2"
@@ -229,13 +233,13 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             Template
           </span>
         </h2>
-        <p className="text-lg text-slate-600">
+        <p className={`text-sm sm:text-lg ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
           Select a design that best represents your professional brand
         </p>
       </div>
 
       {/* Template Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-8 sm:mb-12">
         {templates.map((template, index) => {
           const isSelected = selectedTemplate === template.id;
 
@@ -243,15 +247,17 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             <button
               key={template.id}
               onClick={() => onSelectTemplate(template.id)}
-              className={`group relative rounded-2xl overflow-hidden transition-all duration-500 transform ${
+              className={`group relative rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-500 transform ${
                 isSelected
-                  ? 'scale-105 -translate-y-2'
-                  : 'hover:scale-102 hover:-translate-y-1'
+                  ? 'scale-[1.02] sm:scale-105 -translate-y-1 sm:-translate-y-2'
+                  : 'hover:scale-[1.01] sm:hover:scale-102 hover:-translate-y-0.5 sm:hover:-translate-y-1'
               }`}
               style={{
                 boxShadow: isSelected
-                  ? `0 25px 50px -12px ${template.shadowColor}, 0 0 0 3px ${template.accentColor}`
-                  : '0 10px 30px -10px rgba(0,0,0,0.15)',
+                  ? `0 15px 30px -8px ${template.shadowColor}, 0 0 0 2px ${template.accentColor}`
+                  : isLight
+                    ? '0 4px 15px -5px rgba(0,0,0,0.1)'
+                    : '0 10px 30px -10px rgba(0,0,0,0.3)',
               }}
             >
               {/* Card background with gradient accent */}
@@ -262,14 +268,14 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 
               {/* Top accent bar */}
               <div
-                className="h-1.5 w-full"
+                className="h-1 sm:h-1.5 w-full"
                 style={{ background: template.gradient }}
               />
 
               {/* Preview area */}
-              <div className="bg-slate-100 p-4">
+              <div className={`p-2 sm:p-4 ${isLight ? 'bg-slate-100' : 'bg-slate-800'}`}>
                 <div
-                  className="aspect-[210/150] rounded-xl overflow-hidden transition-transform duration-500 group-hover:scale-105"
+                  className="aspect-[210/150] rounded-lg sm:rounded-xl overflow-hidden transition-transform duration-500 group-hover:scale-105"
                   style={{
                     boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.1)',
                   }}
@@ -279,16 +285,18 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
               </div>
 
               {/* Info section */}
-              <div className="bg-white p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="font-bold text-slate-800">{template.name}</h3>
+              <div className={`p-2 sm:p-4 ${isLight ? 'bg-white' : 'bg-slate-900'}`}>
+                <div className="flex items-center justify-between mb-1 sm:mb-2">
+                  <h3 className={`text-xs sm:text-base font-bold ${isLight ? 'text-slate-800' : 'text-white'}`}>
+                    {template.name}
+                  </h3>
                   {isSelected && (
                     <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center"
+                      className="w-4 h-4 sm:w-6 sm:h-6 rounded-full flex items-center justify-center"
                       style={{ background: template.gradient }}
                     >
                       <svg
-                        className="w-4 h-4 text-white"
+                        className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-white"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -303,7 +311,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
                     </div>
                   )}
                 </div>
-                <p className="text-xs text-slate-500 leading-relaxed">
+                <p className={`text-[10px] sm:text-xs leading-relaxed line-clamp-2 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
                   {template.description}
                 </p>
               </div>
@@ -311,9 +319,9 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
               {/* Selection indicator */}
               {isSelected && (
                 <div
-                  className="absolute inset-0 rounded-2xl pointer-events-none"
+                  className="absolute inset-0 rounded-xl sm:rounded-2xl pointer-events-none"
                   style={{
-                    boxShadow: `inset 0 0 0 3px ${template.accentColor}`,
+                    boxShadow: `inset 0 0 0 2px sm:3px ${template.accentColor}`,
                   }}
                 />
               )}
@@ -326,17 +334,17 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       <div className="flex justify-center">
         <button
           onClick={onNext}
-          className="group px-10 py-4 rounded-2xl text-lg font-bold transition-all duration-300 transform hover:scale-105"
+          className="group px-6 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-bold transition-all duration-300 transform hover:scale-105"
           style={{
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white',
             boxShadow: '0 20px 40px rgba(102, 126, 234, 0.4)',
           }}
         >
-          <span className="flex items-center gap-3">
+          <span className="flex items-center gap-2 sm:gap-3">
             Continue with {templates.find((t) => t.id === selectedTemplate)?.name}
             <svg
-              className="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+              className="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:translate-x-1 transition-transform"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -353,10 +361,10 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       </div>
 
       {/* Template features hint */}
-      <div className="mt-12 text-center">
-        <div className="inline-flex items-center gap-6 text-sm text-slate-500">
-          <span className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+      <div className="mt-8 sm:mt-12 text-center">
+        <div className={`inline-flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-xs sm:text-sm ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+          <span className="flex items-center gap-1.5 sm:gap-2">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -365,8 +373,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             </svg>
             ATS-Friendly
           </span>
-          <span className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+          <span className="flex items-center gap-1.5 sm:gap-2">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -375,8 +383,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             </svg>
             Print-Ready
           </span>
-          <span className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+          <span className="flex items-center gap-1.5 sm:gap-2">
+            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"

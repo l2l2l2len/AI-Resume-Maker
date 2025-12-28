@@ -647,13 +647,13 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
 
       {/* Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 glass border-t border-slate-200/50 z-40">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center max-w-4xl">
-          <Button variant="secondary" onClick={onBack}>
-            Back to Templates
+      <div className="fixed bottom-0 left-0 right-0 glass border-t border-slate-200/50 z-40 safe-area-bottom">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex justify-between items-center gap-2 max-w-4xl">
+          <Button variant="secondary" onClick={onBack} className="text-xs sm:text-sm px-3 sm:px-4">
+            <span className="hidden sm:inline">Back to</span> Templates
           </Button>
-          <Button variant="gradient" size="lg" onClick={onPreview}>
-            Preview Resume
+          <Button variant="gradient" size="lg" onClick={onPreview} className="text-xs sm:text-sm px-4 sm:px-6">
+            Preview <span className="hidden sm:inline">Resume</span>
           </Button>
         </div>
       </div>

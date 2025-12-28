@@ -10,6 +10,7 @@ import { TemplateSelector } from './components/TemplateSelector';
 import { ConfigError } from './components/ConfigError';
 import { ProgressBar, TemplateIcon, FormIcon, PreviewIcon } from './components/ui/ProgressBar';
 import { AutoSaveIndicator } from './components/ui/AutoSaveIndicator';
+import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 
 export type Template = 'classic' | 'modern' | 'compact' | '3d' | 'ats' | 'ats-pro';
 export type Step = 'homepage' | 'template' | 'form' | 'preview';
@@ -30,10 +31,9 @@ const getStepIndex = (step: Step): number => {
   }
 };
 
-const App: React.FC = () => {
-  if (!isApiConfigured) {
-    return <ConfigError />;
-  }
+const AppContent: React.FC = () => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
 
   const [step, setStep] = useState<Step>('homepage');
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -149,16 +149,26 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen text-slate-800 font-sans">
+    <div
+      className={`min-h-screen font-sans transition-colors duration-300 ${
+        isLight ? 'text-slate-800' : 'text-slate-100'
+      }`}
+      style={{
+        background: isLight
+          ? 'linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)'
+          : 'linear-gradient(180deg, #0f0f1a 0%, #1a1a2e 100%)',
+        minHeight: '100vh',
+      }}
+    >
       <Header
         onHomeClick={step !== 'homepage' ? () => setStep('homepage') : undefined}
         onResetResume={step !== 'homepage' ? handleResetResume : undefined}
       />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         {/* Progress Bar */}
         {showProgressBar && (
-          <div className="mb-8 animate-slide-down">
+          <div className="mb-6 sm:mb-8 animate-slide-down">
             <div className="flex justify-between items-center mb-4">
               <ProgressBar
                 steps={STEPS}
@@ -179,6 +189,18 @@ const App: React.FC = () => {
         {renderStep()}
       </main>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  if (!isApiConfigured) {
+    return <ConfigError />;
+  }
+
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 };
 

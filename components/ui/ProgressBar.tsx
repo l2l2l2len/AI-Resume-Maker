@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '../../contexts/ThemeContext';
 
 interface Step {
   id: string;
@@ -19,17 +20,20 @@ const CheckIcon = () => (
 );
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, onStepClick }) => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+
   return (
-    <div className="w-full max-w-3xl mx-auto mb-8">
+    <div className="w-full max-w-3xl mx-auto mb-4 sm:mb-8">
       <div className="relative">
         {/* Progress Line Background */}
         <div className="absolute top-6 left-0 right-0 h-1 bg-white/20 rounded-full mx-12" />
 
         {/* Progress Line Fill */}
         <div
-          className="absolute top-6 left-0 h-1 rounded-full transition-all duration-500 ease-out mx-12"
+          className="absolute top-5 sm:top-6 left-0 h-0.5 sm:h-1 rounded-full transition-all duration-500 ease-out mx-8 sm:mx-12"
           style={{
-            width: `calc(${((currentStep) / (steps.length - 1)) * 100}% - 6rem)`,
+            width: `calc(${((currentStep) / (steps.length - 1)) * 100}% - 4rem)`,
             background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
             boxShadow: '0 0 10px rgba(102, 126, 234, 0.5)',
           }}
@@ -52,7 +56,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
                   onClick={() => isClickable && onStepClick(index)}
                   disabled={!isClickable}
                   className={`
-                    relative z-10 w-12 h-12 rounded-full flex items-center justify-center
+                    relative z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center
                     transition-all duration-300 transform
                     ${isClickable ? 'cursor-pointer hover:scale-110' : 'cursor-default'}
                     ${isCompleted
