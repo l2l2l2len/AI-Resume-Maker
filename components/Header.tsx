@@ -82,20 +82,20 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
         borderColor: 'rgba(255,255,255,0.1)',
       }}
     >
-      <div className="container mx-auto px-3 sm:px-4 py-2 sm:py-3 flex justify-between items-center">
+      <div className="container mx-auto px-2 sm:px-4 py-1.5 sm:py-3 flex justify-between items-center">
         {/* Left side - Home button */}
         <div className="flex-1 flex justify-start">
           {onHomeClick && (
             <button
               onClick={onHomeClick}
-              className="group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-white/10"
+              className="group flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 hover:bg-white/10"
               style={{
                 background: 'rgba(255,255,255,0.05)',
               }}
               aria-label="Back to Homepage"
             >
               <BackIcon />
-              <span className="text-sm font-medium text-slate-300 group-hover:text-white">Home</span>
+              <span className="text-xs sm:text-sm font-medium text-slate-300 group-hover:text-white hidden sm:inline">Home</span>
             </button>
           )}
         </div>
@@ -125,14 +125,14 @@ export const Header: React.FC<HeaderProps> = ({ onHomeClick, onResetResume }) =>
           {onResetResume && (
             <button
               onClick={onResetResume}
-              className="group flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-300 hover:bg-red-500/20"
+              className="group flex items-center space-x-1 sm:space-x-2 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl transition-all duration-300 hover:bg-red-500/20"
               style={{
                 background: 'rgba(255,255,255,0.05)',
               }}
               aria-label="Start New Resume"
             >
               <NewFileIcon />
-              <span className="text-sm font-medium text-slate-300 group-hover:text-red-400">Start New</span>
+              <span className="text-xs sm:text-sm font-medium text-slate-300 group-hover:text-red-400 hidden sm:inline">New</span>
             </button>
           )}
         </div>

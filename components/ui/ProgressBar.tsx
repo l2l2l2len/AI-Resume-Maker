@@ -24,18 +24,23 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
   const isLight = theme === 'light';
 
   return (
-    <div className="w-full max-w-3xl mx-auto mb-4 sm:mb-8">
+    <div className="w-full max-w-3xl mx-auto mb-2 sm:mb-8">
       <div className="relative">
         {/* Progress Line Background */}
-        <div className="absolute top-6 left-0 right-0 h-1 bg-white/20 rounded-full mx-12" />
+        <div
+          className="absolute top-4 sm:top-6 left-0 right-0 h-0.5 rounded-full mx-6 sm:mx-12"
+          style={{
+            background: isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)',
+          }}
+        />
 
         {/* Progress Line Fill */}
         <div
-          className="absolute top-5 sm:top-6 left-0 h-0.5 sm:h-1 rounded-full transition-all duration-500 ease-out mx-8 sm:mx-12"
+          className="absolute top-4 sm:top-6 left-0 h-0.5 rounded-full transition-all duration-500 ease-out mx-6 sm:mx-12"
           style={{
-            width: `calc(${((currentStep) / (steps.length - 1)) * 100}% - 4rem)`,
+            width: `calc(${((currentStep) / (steps.length - 1)) * 100}% - 3rem)`,
             background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
-            boxShadow: '0 0 10px rgba(102, 126, 234, 0.5)',
+            boxShadow: '0 0 8px rgba(102, 126, 234, 0.5)',
           }}
         />
 
@@ -51,46 +56,53 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
                 key={step.id}
                 className="flex flex-col items-center"
               >
-                {/* Step Circle */}
+                {/* Step Circle - smaller on mobile */}
                 <button
                   onClick={() => isClickable && onStepClick(index)}
                   disabled={!isClickable}
                   className={`
-                    relative z-10 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center
+                    relative z-10 w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center
                     transition-all duration-300 transform
                     ${isClickable ? 'cursor-pointer hover:scale-110' : 'cursor-default'}
                     ${isCompleted
                       ? 'text-white'
                       : isCurrent
                         ? 'text-white'
-                        : 'bg-white/10 border-2 border-white/20 text-white/50'
+                        : isLight
+                          ? 'bg-slate-200 border-2 border-slate-300 text-slate-400'
+                          : 'bg-white/10 border-2 border-white/20 text-white/50'
                     }
                   `}
                   style={
                     isCompleted || isCurrent
                       ? {
                           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                          boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                          boxShadow: '0 3px 10px rgba(102, 126, 234, 0.4)',
                         }
                       : {}
                   }
                 >
-                  {isCompleted ? <CheckIcon /> : step.icon}
+                  <span className="scale-75 sm:scale-100">
+                    {isCompleted ? <CheckIcon /> : step.icon}
+                  </span>
 
-                  {/* Pulse animation for current step */}
+                  {/* Pulse animation for current step - subtle on mobile */}
                   {isCurrent && (
                     <span
-                      className="absolute inset-0 rounded-full animate-ping opacity-30"
+                      className="absolute inset-0 rounded-full animate-ping opacity-20 sm:opacity-30"
                       style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
                     />
                   )}
                 </button>
 
-                {/* Step Label */}
+                {/* Step Label - smaller on mobile */}
                 <span
                   className={`
-                    mt-3 text-xs font-medium transition-colors duration-300
-                    ${isCompleted || isCurrent ? 'text-white' : 'text-white/50'}
+                    mt-1 sm:mt-3 text-[9px] sm:text-xs font-medium transition-colors duration-300
+                    ${isCompleted || isCurrent
+                      ? isLight ? 'text-slate-800' : 'text-white'
+                      : isLight ? 'text-slate-400' : 'text-white/50'
+                    }
                   `}
                 >
                   {step.label}
