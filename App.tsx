@@ -165,11 +165,11 @@ const AppContent: React.FC = () => {
         onResetResume={step !== 'homepage' ? handleResetResume : undefined}
       />
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
-        {/* Progress Bar */}
+      <main className="container mx-auto px-2 sm:px-4 py-2 sm:py-8">
+        {/* Progress Bar - compact on mobile */}
         {showProgressBar && (
-          <div className="mb-6 sm:mb-8 animate-slide-down">
-            <div className="flex justify-between items-center mb-4">
+          <div className="mb-2 sm:mb-8 animate-slide-down">
+            <div className="flex justify-between items-center mb-1 sm:mb-4">
               <ProgressBar
                 steps={STEPS}
                 currentStep={currentStepIndex}
@@ -177,7 +177,7 @@ const AppContent: React.FC = () => {
               />
             </div>
 
-            {/* Auto-save indicator */}
+            {/* Auto-save indicator - smaller on mobile */}
             {showAutoSave && (
               <div className="flex justify-end">
                 <AutoSaveIndicator isSaving={isSaving} lastSaved={lastSaved} />

@@ -485,15 +485,15 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
     <div className="relative">
       <FloatingNav onStart={onStart} isLight={isLight} />
 
-      {/* Hero Section */}
-      <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl mx-[-0.75rem] sm:mx-[-1rem] mt-[-1rem] sm:mt-[-2rem]">
+      {/* Hero Section - Mobile optimized to fit viewport */}
+      <section className="relative h-[100dvh] sm:min-h-[90vh] sm:h-auto flex items-center justify-center overflow-hidden rounded-2xl sm:rounded-3xl mx-[-0.75rem] sm:mx-[-1rem] mt-[-1rem] sm:mt-[-2rem]">
         <AnimatedWaveBackground isLight={isLight} />
 
-        {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 sm:px-6 py-20 sm:py-24 max-w-4xl mx-auto">
+        {/* Hero Content - Compact on mobile */}
+        <div className="relative z-10 text-center px-4 sm:px-6 py-4 sm:py-24 max-w-4xl mx-auto flex flex-col justify-center h-full">
           {/* Badge */}
           <motion.div
-            className={`inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 sm:mb-8 ${
+            className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full mb-3 sm:mb-8 mx-auto ${
               isLight
                 ? 'bg-indigo-100 text-indigo-700'
                 : 'bg-indigo-500/20 text-indigo-300'
@@ -502,19 +502,19 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Star className="w-4 h-4" />
-            <span className="text-sm font-medium">Free & No Sign-up Required</span>
+            <Star className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="text-xs sm:text-sm font-medium">Free & No Sign-up Required</span>
           </motion.div>
 
-          {/* Main Headline - Serif Font */}
+          {/* Main Headline - Serif Font - Smaller on mobile */}
           <motion.h1
-            className="mb-6"
+            className="mb-3 sm:mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
             <span
-              className={`block text-4xl sm:text-5xl md:text-7xl font-bold leading-tight ${
+              className={`block text-2xl sm:text-5xl md:text-7xl font-bold leading-tight ${
                 isLight ? 'text-slate-900' : 'text-white'
               }`}
               style={{ fontFamily: "'Playfair Display', serif" }}
@@ -522,7 +522,7 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
               Craft resumes that
             </span>
             <span
-              className="block text-4xl sm:text-5xl md:text-7xl font-bold leading-tight mt-2"
+              className="block text-2xl sm:text-5xl md:text-7xl font-bold leading-tight mt-1 sm:mt-2"
               style={{
                 fontFamily: "'Playfair Display', serif",
                 background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)',
@@ -535,43 +535,42 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
             </span>
           </motion.h1>
 
-          {/* Subheadline - Sans Serif */}
+          {/* Subheadline - Sans Serif - Compact on mobile */}
           <motion.p
-            className={`text-lg sm:text-xl max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed ${
+            className={`text-sm sm:text-xl max-w-2xl mx-auto mb-4 sm:mb-10 leading-relaxed ${
               isLight ? 'text-slate-600' : 'text-slate-400'
             }`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            Professional resume builder with stunning templates, AI-powered suggestions,
-            and instant PDF export. Land your dream job faster.
+            Professional resume builder with stunning templates and instant PDF export.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Buttons - Compact on mobile */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center items-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
             <motion.button
               onClick={onStart}
-              className="group w-full sm:w-auto px-8 py-4 rounded-xl sm:rounded-2xl text-lg font-semibold text-white flex items-center justify-center gap-2"
+              className="group w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-semibold text-white flex items-center justify-center gap-2"
               style={{
                 background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
-                boxShadow: '0 20px 40px rgba(99, 102, 241, 0.3)',
+                boxShadow: '0 15px 30px rgba(99, 102, 241, 0.3)',
               }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.98 }}
             >
               Start Building Free
-              <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
             </motion.button>
 
             <motion.button
               onClick={onStart}
-              className={`w-full sm:w-auto px-8 py-4 rounded-xl sm:rounded-2xl text-lg font-medium ${
+              className={`w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-medium ${
                 isLight
                   ? 'bg-white text-slate-800 shadow-lg'
                   : 'bg-slate-800 text-white'
@@ -584,9 +583,9 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
             </motion.button>
           </motion.div>
 
-          {/* Trust Indicators */}
+          {/* Trust Indicators - Compact on mobile */}
           <motion.div
-            className={`mt-10 sm:mt-12 flex flex-wrap justify-center gap-6 sm:gap-8 text-sm ${
+            className={`mt-4 sm:mt-12 flex flex-wrap justify-center gap-3 sm:gap-8 text-xs sm:text-sm ${
               isLight ? 'text-slate-500' : 'text-slate-500'
             }`}
             initial={{ opacity: 0 }}
@@ -594,17 +593,17 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
             transition={{ delay: 0.6 }}
           >
             {['ATS-Optimized', '100% Private', 'No Watermarks'].map((item, index) => (
-              <span key={index} className="flex items-center gap-2">
-                <FileCheck className="w-4 h-4 text-emerald-500" />
+              <span key={index} className="flex items-center gap-1 sm:gap-2">
+                <FileCheck className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-500" />
                 {item}
               </span>
             ))}
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll Indicator - Only on desktop */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
+          className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 hidden sm:block"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, 10, 0] }}
           transition={{
