@@ -6,7 +6,6 @@ import { Template } from '../App';
 import { TemplateClassic } from './templates/TemplateClassic';
 import { TemplateModern } from './templates/TemplateModern';
 import { TemplateCompact } from './templates/TemplateCompact';
-import { Template3D } from './templates/Template3D';
 import { TemplateATS } from './templates/TemplateATS';
 import { TemplateATSPro } from './templates/TemplateATSPro';
 
@@ -23,7 +22,6 @@ const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
   classic: TemplateClassic,
   modern: TemplateModern,
   compact: TemplateCompact,
-  '3d': Template3D,
   'ats': TemplateATS,
   'ats-pro': TemplateATSPro,
 };
@@ -34,19 +32,32 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
 
   const handleDownloadPdf = async () => {
     if (!previewRef.current) return;
+
+    // Check if libraries are loaded
+    if (typeof html2canvas === 'undefined') {
+      alert("PDF library (html2canvas) is not loaded. Please refresh the page and try again.");
+      return;
+    }
+    if (typeof jspdf === 'undefined' || !jspdf.jsPDF) {
+      alert("PDF library (jsPDF) is not loaded. Please refresh the page and try again.");
+      return;
+    }
+
     setIsDownloading(true);
     try {
       const canvas = await html2canvas(previewRef.current, {
-        scale: 3,
+        scale: 2,
         useCORS: true,
-        backgroundColor: '#ffffff', // Set a solid background for PDF
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        logging: false,
       });
 
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      
+
       const canvasAspectRatio = canvas.width / canvas.height;
       const pageAspectRatio = pdfWidth / pdfHeight;
 
@@ -58,18 +69,18 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
           finalHeight = pdfHeight;
           finalWidth = pdfHeight * canvasAspectRatio;
       }
-      
+
       const x = (pdfWidth - finalWidth) / 2;
       const y = 0;
 
       pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
-      
-      const fileName = `${resumeData.personalInfo.name.replace(/\s+/g, '_')}_Resume.pdf`;
+
+      const fileName = `${resumeData.personalInfo.name.replace(/\s+/g, '_') || 'Resume'}_Resume.pdf`;
       pdf.save(fileName);
 
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error downloading PDF:", error);
-      alert("Sorry, there was an error downloading the PDF. Please check the console for more details.");
+      alert(`Error generating PDF: ${error.message || 'Unknown error'}. Please try again.`);
     } finally {
       setIsDownloading(false);
     }
@@ -78,25 +89,28 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
   const SelectedTemplate = templates[template];
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white/70 backdrop-blur-lg p-4 rounded-lg shadow-md border border-slate-200 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-slate-800">Final Preview</h2>
-          <div className="flex items-center gap-4">
-              <Button onClick={onEdit} variant="secondary">
-                  <BackIcon /> Edit Details
-              </Button>
-              <Button 
-                onClick={handleDownloadPdf}
-                disabled={isDownloading}
-              >
-                {isDownloading ? <SpinnerIcon /> : <DownloadIcon />}
-                {isDownloading ? 'Downloading...' : 'Download PDF'}
-              </Button>
-          </div>
+    <div className="space-y-6 pb-20 sm:pb-0">
+      {/* Header with buttons */}
+      <div className="bg-white p-4 rounded-xl border border-gray-200 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <h2 className="text-xl font-semibold text-gray-900">Final Preview</h2>
+        <div className="flex items-center gap-3">
+          <Button onClick={onEdit} variant="secondary">
+            <BackIcon /> Edit
+          </Button>
+          <Button
+            onClick={handleDownloadPdf}
+            disabled={isDownloading}
+            className="hidden sm:flex"
+          >
+            {isDownloading ? <SpinnerIcon /> : <DownloadIcon />}
+            {isDownloading ? 'Downloading...' : 'Download PDF'}
+          </Button>
+        </div>
       </div>
-      
-      <div className="bg-slate-200 border border-slate-300 shadow-lg rounded-lg p-8 A4-aspect-ratio">
-        <div className="bg-white text-black shadow-inner rounded-md h-full overflow-auto">
+
+      {/* Resume Preview */}
+      <div className="bg-gray-200 border border-gray-300 rounded-xl p-4 sm:p-8 A4-aspect-ratio">
+        <div className="bg-white text-black shadow-lg rounded-lg h-full overflow-auto">
           <SelectedTemplate ref={previewRef} resumeData={resumeData} />
         </div>
         <style>{`
@@ -112,6 +126,17 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
             }
           }
         `}</style>
+      </div>
+
+      {/* Mobile floating download button */}
+      <div className="fixed bottom-4 left-4 right-4 sm:hidden z-50">
+        <button
+          onClick={handleDownloadPdf}
+          disabled={isDownloading}
+          className="w-full py-3 px-6 rounded-lg text-base font-medium text-white bg-blue-600 hover:bg-blue-700 flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
+        >
+          {isDownloading ? <><SpinnerIcon />Downloading...</> : <><DownloadIcon />Download PDF</>}
+        </button>
       </div>
     </div>
   );
