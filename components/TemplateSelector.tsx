@@ -1,8 +1,7 @@
 import React from 'react';
 import { Template } from '../App';
-import { SectionWrapper } from './ui/SectionWrapper';
 import { Button } from './ui/Button';
-import { useTheme } from '../contexts/ThemeContext';
+import { CheckCircle2 } from 'lucide-react';
 
 interface TemplateSelectorProps {
   selectedTemplate: Template;
@@ -14,9 +13,7 @@ interface TemplateInfo {
   id: Template;
   name: string;
   description: string;
-  gradient: string;
-  accentColor: string;
-  shadowColor: string;
+  color: string;
 }
 
 const templates: TemplateInfo[] = [
@@ -24,93 +21,81 @@ const templates: TemplateInfo[] = [
     id: 'classic',
     name: 'Classic',
     description: 'Traditional, clean design perfect for corporate roles',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    accentColor: '#667eea',
-    shadowColor: 'rgba(102, 126, 234, 0.4)',
+    color: '#2563eb',
   },
   {
     id: 'modern',
     name: 'Modern',
     description: 'Two-column layout with a bold sidebar',
-    gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
-    accentColor: '#11998e',
-    shadowColor: 'rgba(17, 153, 142, 0.4)',
+    color: '#059669',
   },
   {
     id: 'compact',
     name: 'Compact',
     description: 'Space-efficient design for experienced professionals',
-    gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    accentColor: '#f5576c',
-    shadowColor: 'rgba(245, 87, 108, 0.4)',
+    color: '#db2777',
   },
   {
     id: 'ats',
     name: 'ATS Simple',
     description: 'Clean, minimal format optimized for applicant tracking systems',
-    gradient: 'linear-gradient(135deg, #374151 0%, #1f2937 100%)',
-    accentColor: '#374151',
-    shadowColor: 'rgba(55, 65, 81, 0.4)',
+    color: '#374151',
   },
   {
     id: 'ats-pro',
     name: 'ATS Pro',
     description: 'Professional ATS-friendly design with subtle styling',
-    gradient: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-    accentColor: '#2563eb',
-    shadowColor: 'rgba(37, 99, 235, 0.4)',
+    color: '#2563eb',
   },
 ];
 
 // Template preview components
 const ClassicPreview: React.FC = () => (
-  <div className="w-full h-full bg-white rounded-lg p-3 space-y-2">
-    <div className="h-4 bg-gradient-to-r from-slate-200 to-slate-300 rounded mx-auto w-2/3" />
-    <div className="h-2 bg-slate-200 rounded mx-auto w-1/2" />
+  <div className="w-full h-full bg-white rounded p-3 space-y-2">
+    <div className="h-4 bg-gray-200 rounded mx-auto w-2/3" />
+    <div className="h-2 bg-gray-100 rounded mx-auto w-1/2" />
     <div className="mt-3 space-y-1.5">
-      <div className="h-2 bg-slate-100 rounded" />
-      <div className="h-2 bg-slate-100 rounded w-5/6" />
-      <div className="h-2 bg-slate-100 rounded w-4/6" />
+      <div className="h-2 bg-gray-100 rounded" />
+      <div className="h-2 bg-gray-100 rounded w-5/6" />
+      <div className="h-2 bg-gray-100 rounded w-4/6" />
     </div>
   </div>
 );
 
 const ModernPreview: React.FC = () => (
-  <div className="w-full h-full flex rounded-lg overflow-hidden">
-    <div className="w-1/3 bg-slate-700 p-2">
-      <div className="h-3 bg-slate-500 rounded w-3/4 mb-2" />
-      <div className="h-2 bg-slate-600 rounded w-full mb-1" />
-      <div className="h-2 bg-slate-600 rounded w-2/3" />
+  <div className="w-full h-full flex rounded overflow-hidden">
+    <div className="w-1/3 bg-gray-700 p-2">
+      <div className="h-3 bg-gray-500 rounded w-3/4 mb-2" />
+      <div className="h-2 bg-gray-600 rounded w-full mb-1" />
+      <div className="h-2 bg-gray-600 rounded w-2/3" />
     </div>
     <div className="w-2/3 bg-white p-2 space-y-1.5">
-      <div className="h-2 bg-slate-200 rounded" />
-      <div className="h-2 bg-slate-200 rounded w-5/6" />
-      <div className="h-2 bg-slate-100 rounded w-4/6" />
+      <div className="h-2 bg-gray-200 rounded" />
+      <div className="h-2 bg-gray-200 rounded w-5/6" />
+      <div className="h-2 bg-gray-100 rounded w-4/6" />
     </div>
   </div>
 );
 
 const CompactPreview: React.FC = () => (
-  <div className="w-full h-full bg-white rounded-lg p-2 space-y-1">
-    <div className="h-2.5 bg-slate-200 rounded w-1/2" />
-    <div className="h-1.5 bg-slate-100 rounded w-2/3" />
-    <div className="h-1.5 bg-slate-100 rounded w-full" />
-    <div className="h-1.5 bg-slate-100 rounded w-5/6" />
-    <div className="h-1.5 bg-slate-100 rounded w-4/6" />
-    <div className="h-1.5 bg-slate-100 rounded w-full" />
+  <div className="w-full h-full bg-white rounded p-2 space-y-1">
+    <div className="h-2.5 bg-gray-200 rounded w-1/2" />
+    <div className="h-1.5 bg-gray-100 rounded w-2/3" />
+    <div className="h-1.5 bg-gray-100 rounded w-full" />
+    <div className="h-1.5 bg-gray-100 rounded w-5/6" />
+    <div className="h-1.5 bg-gray-100 rounded w-4/6" />
+    <div className="h-1.5 bg-gray-100 rounded w-full" />
   </div>
 );
 
 const ATSPreview: React.FC = () => (
-  <div className="w-full h-full bg-white rounded-lg p-2 space-y-1.5">
-    {/* Simple header */}
+  <div className="w-full h-full bg-white rounded p-2 space-y-1.5">
     <div className="text-center pb-1 border-b border-gray-300">
       <div className="h-3 bg-gray-800 rounded w-1/2 mx-auto mb-1" />
       <div className="h-1.5 bg-gray-300 rounded w-3/4 mx-auto" />
     </div>
-    {/* Section */}
     <div className="pt-1">
-      <div className="h-2 bg-gray-800 rounded w-1/3 mb-1 border-b border-gray-800" />
+      <div className="h-2 bg-gray-800 rounded w-1/3 mb-1" />
       <div className="space-y-0.5">
         <div className="h-1.5 bg-gray-200 rounded w-full" />
         <div className="h-1.5 bg-gray-200 rounded w-5/6" />
@@ -121,22 +106,19 @@ const ATSPreview: React.FC = () => (
 );
 
 const ATSProPreview: React.FC = () => (
-  <div className="w-full h-full bg-white rounded-lg p-2">
-    {/* Header with accent */}
+  <div className="w-full h-full bg-white rounded p-2">
     <div className="pb-1.5 mb-1.5 border-b-2 border-blue-600">
-      <div className="h-3 bg-slate-700 rounded w-2/3 mb-1" />
+      <div className="h-3 bg-gray-700 rounded w-2/3 mb-1" />
       <div className="flex gap-1">
         <div className="h-1.5 bg-gray-300 rounded w-1/4" />
         <div className="h-1.5 bg-gray-300 rounded w-1/4" />
       </div>
     </div>
-    {/* Skills pills */}
     <div className="flex gap-1 mb-1.5 flex-wrap">
       <div className="h-2 bg-blue-100 rounded-full w-8" />
       <div className="h-2 bg-blue-100 rounded-full w-6" />
       <div className="h-2 bg-blue-100 rounded-full w-10" />
     </div>
-    {/* Section */}
     <div className="h-1.5 bg-blue-600 rounded w-1/3 mb-1" />
     <div className="space-y-0.5">
       <div className="h-1.5 bg-gray-200 rounded w-full" />
@@ -167,119 +149,60 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   onSelectTemplate,
   onNext,
 }) => {
-  const { theme } = useTheme();
-  const isLight = theme === 'light';
-
   return (
-    <div className="max-w-5xl mx-auto px-2 sm:px-0">
+    <div className="max-w-5xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-6 sm:mb-12">
-        <h2 className={`text-2xl sm:text-4xl font-bold mb-2 sm:mb-3 ${isLight ? 'text-slate-900' : 'text-white'}`}>
-          Choose Your
-          <span
-            className="ml-2"
-            style={{
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Template
-          </span>
+      <div className="text-center mb-8 sm:mb-12">
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+          Choose Your Template
         </h2>
-        <p className={`text-sm sm:text-lg ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+        <p className="text-gray-600">
           Select a design that best represents your professional brand
         </p>
       </div>
 
       {/* Template Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 mb-8 sm:mb-12">
-        {templates.map((template, index) => {
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+        {templates.map((template) => {
           const isSelected = selectedTemplate === template.id;
 
           return (
             <button
               key={template.id}
               onClick={() => onSelectTemplate(template.id)}
-              className={`group relative rounded-xl sm:rounded-2xl overflow-hidden transition-all duration-500 transform ${
+              className={`group relative bg-white rounded-xl overflow-hidden transition-all duration-200 ${
                 isSelected
-                  ? 'scale-[1.02] sm:scale-105 -translate-y-1 sm:-translate-y-2'
-                  : 'hover:scale-[1.01] sm:hover:scale-102 hover:-translate-y-0.5 sm:hover:-translate-y-1'
+                  ? 'ring-2 ring-blue-600 shadow-lg'
+                  : 'border border-gray-200 hover:shadow-md hover:border-gray-300'
               }`}
-              style={{
-                boxShadow: isSelected
-                  ? `0 15px 30px -8px ${template.shadowColor}, 0 0 0 2px ${template.accentColor}`
-                  : isLight
-                    ? '0 4px 15px -5px rgba(0,0,0,0.1)'
-                    : '0 10px 30px -10px rgba(0,0,0,0.3)',
-              }}
             >
-              {/* Card background with gradient accent */}
-              <div
-                className="absolute inset-0 opacity-10 transition-opacity duration-300 group-hover:opacity-20"
-                style={{ background: template.gradient }}
-              />
-
               {/* Top accent bar */}
               <div
-                className="h-1 sm:h-1.5 w-full"
-                style={{ background: template.gradient }}
+                className="h-1 w-full"
+                style={{ backgroundColor: template.color }}
               />
 
               {/* Preview area */}
-              <div className={`p-2 sm:p-4 ${isLight ? 'bg-slate-100' : 'bg-slate-800'}`}>
-                <div
-                  className="aspect-[210/150] rounded-lg sm:rounded-xl overflow-hidden transition-transform duration-500 group-hover:scale-105"
-                  style={{
-                    boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.1)',
-                  }}
-                >
+              <div className="p-3 sm:p-4 bg-gray-100">
+                <div className="aspect-[210/150] rounded-lg overflow-hidden bg-gray-50">
                   {getPreviewComponent(template.id)}
                 </div>
               </div>
 
               {/* Info section */}
-              <div className={`p-2 sm:p-4 ${isLight ? 'bg-white' : 'bg-slate-900'}`}>
-                <div className="flex items-center justify-between mb-1 sm:mb-2">
-                  <h3 className={`text-xs sm:text-base font-bold ${isLight ? 'text-slate-800' : 'text-white'}`}>
+              <div className="p-3 sm:p-4">
+                <div className="flex items-center justify-between mb-1">
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-900">
                     {template.name}
                   </h3>
                   {isSelected && (
-                    <div
-                      className="w-4 h-4 sm:w-6 sm:h-6 rounded-full flex items-center justify-center"
-                      style={{ background: template.gradient }}
-                    >
-                      <svg
-                        className="w-2.5 h-2.5 sm:w-4 sm:h-4 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={3}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                    </div>
+                    <CheckCircle2 className="w-5 h-5 text-blue-600" />
                   )}
                 </div>
-                <p className={`text-[10px] sm:text-xs leading-relaxed line-clamp-2 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                <p className="text-xs sm:text-sm text-gray-500 line-clamp-2">
                   {template.description}
                 </p>
               </div>
-
-              {/* Selection indicator */}
-              {isSelected && (
-                <div
-                  className="absolute inset-0 rounded-xl sm:rounded-2xl pointer-events-none"
-                  style={{
-                    boxShadow: `inset 0 0 0 2px sm:3px ${template.accentColor}`,
-                  }}
-                />
-              )}
             </button>
           );
         })}
@@ -287,39 +210,33 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
 
       {/* CTA Button */}
       <div className="flex justify-center">
-        <button
+        <Button
           onClick={onNext}
-          className="group px-6 sm:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-bold transition-all duration-300 transform hover:scale-105"
-          style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            color: 'white',
-            boxShadow: '0 20px 40px rgba(102, 126, 234, 0.4)',
-          }}
+          size="lg"
+          className="px-8"
         >
-          <span className="flex items-center gap-2 sm:gap-3">
-            Continue with {templates.find((t) => t.id === selectedTemplate)?.name}
-            <svg
-              className="w-4 h-4 sm:w-5 sm:h-5 transform group-hover:translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17 8l4 4m0 0l-4 4m4-4H3"
-              />
-            </svg>
-          </span>
-        </button>
+          Continue with {templates.find((t) => t.id === selectedTemplate)?.name}
+          <svg
+            className="w-5 h-5 ml-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M17 8l4 4m0 0l-4 4m4-4H3"
+            />
+          </svg>
+        </Button>
       </div>
 
       {/* Template features hint */}
       <div className="mt-8 sm:mt-12 text-center">
-        <div className={`inline-flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-xs sm:text-sm ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-          <span className="flex items-center gap-1.5 sm:gap-2">
-            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+        <div className="inline-flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-sm text-gray-500">
+          <span className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -328,8 +245,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             </svg>
             ATS-Friendly
           </span>
-          <span className="flex items-center gap-1.5 sm:gap-2">
-            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+          <span className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -338,8 +255,8 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             </svg>
             Print-Ready
           </span>
-          <span className="flex items-center gap-1.5 sm:gap-2">
-            <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+          <span className="flex items-center gap-2">
+            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"

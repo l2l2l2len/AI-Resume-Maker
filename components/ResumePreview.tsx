@@ -8,7 +8,6 @@ import { TemplateModern } from './templates/TemplateModern';
 import { TemplateCompact } from './templates/TemplateCompact';
 import { TemplateATS } from './templates/TemplateATS';
 import { TemplateATSPro } from './templates/TemplateATSPro';
-import { useTheme } from '../contexts/ThemeContext';
 
 declare const html2canvas: any;
 declare const jspdf: { jsPDF: any };
@@ -30,8 +29,6 @@ const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
 export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, template, onEdit }) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  const { theme } = useTheme();
-  const isLight = theme === 'light';
 
   const handleDownloadPdf = async () => {
     if (!previewRef.current) return;
@@ -92,32 +89,28 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
   const SelectedTemplate = templates[template];
 
   return (
-    <div className="space-y-4 sm:space-y-6 pb-20 sm:pb-0">
-      {/* Header with buttons - Mobile optimized */}
-      <div className={`p-3 sm:p-4 rounded-lg shadow-md border flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 ${
-        isLight ? 'bg-white/70 backdrop-blur-lg border-slate-200' : 'bg-slate-800/70 backdrop-blur-lg border-slate-700'
-      }`}>
-          <h2 className={`text-lg sm:text-xl font-semibold ${isLight ? 'text-slate-800' : 'text-white'}`}>Final Preview</h2>
-          <div className="flex items-center gap-2 sm:gap-4">
-              <Button onClick={onEdit} variant="secondary" className="flex-1 sm:flex-initial text-sm sm:text-base">
-                  <BackIcon /> <span className="hidden sm:inline">Edit</span> <span className="sm:hidden">Edit</span>
-              </Button>
-              <Button
-                onClick={handleDownloadPdf}
-                disabled={isDownloading}
-                className="flex-1 sm:flex-initial text-sm sm:text-base hidden sm:flex"
-              >
-                {isDownloading ? <SpinnerIcon /> : <DownloadIcon />}
-                {isDownloading ? 'Downloading...' : 'Download PDF'}
-              </Button>
-          </div>
+    <div className="space-y-6 pb-20 sm:pb-0">
+      {/* Header with buttons */}
+      <div className="bg-white p-4 rounded-xl border border-gray-200 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+        <h2 className="text-xl font-semibold text-gray-900">Final Preview</h2>
+        <div className="flex items-center gap-3">
+          <Button onClick={onEdit} variant="secondary">
+            <BackIcon /> Edit
+          </Button>
+          <Button
+            onClick={handleDownloadPdf}
+            disabled={isDownloading}
+            className="hidden sm:flex"
+          >
+            {isDownloading ? <SpinnerIcon /> : <DownloadIcon />}
+            {isDownloading ? 'Downloading...' : 'Download PDF'}
+          </Button>
+        </div>
       </div>
 
       {/* Resume Preview */}
-      <div className={`border shadow-lg rounded-lg p-2 sm:p-8 A4-aspect-ratio ${
-        isLight ? 'bg-slate-200 border-slate-300' : 'bg-slate-700 border-slate-600'
-      }`}>
-        <div className="bg-white text-black shadow-inner rounded-md h-full overflow-auto">
+      <div className="bg-gray-200 border border-gray-300 rounded-xl p-4 sm:p-8 A4-aspect-ratio">
+        <div className="bg-white text-black shadow-lg rounded-lg h-full overflow-auto">
           <SelectedTemplate ref={previewRef} resumeData={resumeData} />
         </div>
         <style>{`
@@ -140,11 +133,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
         <button
           onClick={handleDownloadPdf}
           disabled={isDownloading}
-          className="w-full py-3 px-6 rounded-xl text-base font-semibold text-white flex items-center justify-center gap-2 disabled:opacity-50"
-          style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            boxShadow: '0 10px 25px rgba(102, 126, 234, 0.4)',
-          }}
+          className="w-full py-3 px-6 rounded-lg text-base font-medium text-white bg-blue-600 hover:bg-blue-700 flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
         >
           {isDownloading ? <><SpinnerIcon />Downloading...</> : <><DownloadIcon />Download PDF</>}
         </button>

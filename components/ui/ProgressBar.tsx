@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTheme } from '../../contexts/ThemeContext';
 
 interface Step {
   id: string;
@@ -20,27 +19,17 @@ const CheckIcon = () => (
 );
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, onStepClick }) => {
-  const { theme } = useTheme();
-  const isLight = theme === 'light';
-
   return (
-    <div className="w-full max-w-3xl mx-auto mb-2 sm:mb-8">
+    <div className="w-full max-w-3xl mx-auto">
       <div className="relative">
         {/* Progress Line Background */}
-        <div
-          className="absolute top-4 sm:top-6 left-0 right-0 h-0.5 rounded-full mx-6 sm:mx-12"
-          style={{
-            background: isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255,255,255,0.2)',
-          }}
-        />
+        <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-200 mx-10" />
 
         {/* Progress Line Fill */}
         <div
-          className="absolute top-4 sm:top-6 left-0 h-0.5 rounded-full transition-all duration-500 ease-out mx-6 sm:mx-12"
+          className="absolute top-5 left-0 h-0.5 bg-blue-600 transition-all duration-300 mx-10"
           style={{
-            width: `calc(${((currentStep) / (steps.length - 1)) * 100}% - 3rem)`,
-            background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
-            boxShadow: '0 0 8px rgba(102, 126, 234, 0.5)',
+            width: `calc(${((currentStep) / (steps.length - 1)) * 100}% - 2.5rem)`,
           }}
         />
 
@@ -56,53 +45,30 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
                 key={step.id}
                 className="flex flex-col items-center"
               >
-                {/* Step Circle - smaller on mobile */}
+                {/* Step Circle */}
                 <button
                   onClick={() => isClickable && onStepClick(index)}
                   disabled={!isClickable}
                   className={`
-                    relative z-10 w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center
-                    transition-all duration-300 transform
+                    relative z-10 w-10 h-10 rounded-full flex items-center justify-center
+                    transition-all duration-200 border-2
                     ${isClickable ? 'cursor-pointer hover:scale-110' : 'cursor-default'}
                     ${isCompleted
-                      ? 'text-white'
+                      ? 'bg-blue-600 border-blue-600 text-white'
                       : isCurrent
-                        ? 'text-white'
-                        : isLight
-                          ? 'bg-slate-200 border-2 border-slate-300 text-slate-400'
-                          : 'bg-white/10 border-2 border-white/20 text-white/50'
+                        ? 'bg-blue-600 border-blue-600 text-white'
+                        : 'bg-white border-gray-300 text-gray-400'
                     }
                   `}
-                  style={
-                    isCompleted || isCurrent
-                      ? {
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                          boxShadow: '0 3px 10px rgba(102, 126, 234, 0.4)',
-                        }
-                      : {}
-                  }
                 >
-                  <span className="scale-75 sm:scale-100">
-                    {isCompleted ? <CheckIcon /> : step.icon}
-                  </span>
-
-                  {/* Pulse animation for current step - subtle on mobile */}
-                  {isCurrent && (
-                    <span
-                      className="absolute inset-0 rounded-full animate-ping opacity-20 sm:opacity-30"
-                      style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
-                    />
-                  )}
+                  {isCompleted ? <CheckIcon /> : step.icon}
                 </button>
 
-                {/* Step Label - smaller on mobile */}
+                {/* Step Label */}
                 <span
                   className={`
-                    mt-1 sm:mt-3 text-[9px] sm:text-xs font-medium transition-colors duration-300
-                    ${isCompleted || isCurrent
-                      ? isLight ? 'text-slate-800' : 'text-white'
-                      : isLight ? 'text-slate-400' : 'text-white/50'
-                    }
+                    mt-2 text-xs font-medium
+                    ${isCompleted || isCurrent ? 'text-gray-900' : 'text-gray-400'}
                   `}
                 >
                   {step.label}
