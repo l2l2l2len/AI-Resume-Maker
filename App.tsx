@@ -10,7 +10,6 @@ import { TemplateSelector } from './components/TemplateSelector';
 import { ConfigError } from './components/ConfigError';
 import { ProgressBar, TemplateIcon, FormIcon, PreviewIcon } from './components/ui/ProgressBar';
 import { AutoSaveIndicator } from './components/ui/AutoSaveIndicator';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
 
 export type Template = 'classic' | 'modern' | 'compact' | 'ats' | 'ats-pro';
 export type Step = 'homepage' | 'template' | 'form' | 'preview';
@@ -31,10 +30,7 @@ const getStepIndex = (step: Step): number => {
   }
 };
 
-const AppContent: React.FC = () => {
-  const { theme } = useTheme();
-  const isLight = theme === 'light';
-
+const App: React.FC = () => {
   const [step, setStep] = useState<Step>('homepage');
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -106,6 +102,10 @@ const AppContent: React.FC = () => {
   const showProgressBar = step !== 'homepage';
   const showAutoSave = step === 'form';
 
+  if (!isApiConfigured) {
+    return <ConfigError />;
+  }
+
   const renderStep = () => {
     switch(step) {
       case 'homepage':
@@ -149,37 +149,27 @@ const AppContent: React.FC = () => {
   }
 
   return (
-    <div
-      className={`min-h-screen font-sans transition-colors duration-300 ${
-        isLight ? 'text-slate-800' : 'text-slate-100'
-      }`}
-      style={{
-        background: isLight
-          ? 'linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)'
-          : 'linear-gradient(180deg, #0f0f1a 0%, #1a1a2e 100%)',
-        minHeight: '100vh',
-      }}
-    >
-      <Header
-        onHomeClick={step !== 'homepage' ? () => setStep('homepage') : undefined}
-        onResetResume={step !== 'homepage' ? handleResetResume : undefined}
-      />
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      {step !== 'homepage' && (
+        <Header
+          onHomeClick={() => setStep('homepage')}
+          onResetResume={handleResetResume}
+        />
+      )}
 
-      <main className="container mx-auto px-2 sm:px-4 py-2 sm:py-8">
-        {/* Progress Bar - compact on mobile */}
+      <main className={step === 'homepage' ? '' : 'container mx-auto px-4 py-8'}>
+        {/* Progress Bar */}
         {showProgressBar && (
-          <div className="mb-2 sm:mb-8 animate-slide-down">
-            <div className="flex justify-between items-center mb-1 sm:mb-4">
-              <ProgressBar
-                steps={STEPS}
-                currentStep={currentStepIndex}
-                onStepClick={handleStepClick}
-              />
-            </div>
+          <div className="mb-8 animate-slide-down">
+            <ProgressBar
+              steps={STEPS}
+              currentStep={currentStepIndex}
+              onStepClick={handleStepClick}
+            />
 
-            {/* Auto-save indicator - smaller on mobile */}
+            {/* Auto-save indicator */}
             {showAutoSave && (
-              <div className="flex justify-end">
+              <div className="flex justify-end mt-4">
                 <AutoSaveIndicator isSaving={isSaving} lastSaved={lastSaved} />
               </div>
             )}
@@ -189,18 +179,6 @@ const AppContent: React.FC = () => {
         {renderStep()}
       </main>
     </div>
-  );
-};
-
-const App: React.FC = () => {
-  if (!isApiConfigured) {
-    return <ConfigError />;
-  }
-
-  return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
   );
 };
 
