@@ -1,5 +1,6 @@
 import React from 'react';
-import { FileCheck, Layout, Download, Shield, Sparkles, ArrowRight } from 'lucide-react';
+import { FileCheck, Layout, Download, Shield, Sparkles, ArrowRight, Eye } from 'lucide-react';
+import { useVisitCounter } from '../hooks/useVisitCounter';
 
 interface HomepageProps {
   onStart: () => void;
@@ -36,6 +37,8 @@ const StepItem: React.FC<{
 );
 
 export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
+  const visitCount = useVisitCounter();
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -105,6 +108,10 @@ export const Homepage: React.FC<HomepageProps> = ({ onStart }) => {
               <span className="flex items-center gap-2">
                 <FileCheck className="w-4 h-4 text-green-500" />
                 No Watermarks
+              </span>
+              <span className="flex items-center gap-2">
+                <Eye className="w-4 h-4 text-blue-500" />
+                {visitCount.toLocaleString()} {visitCount === 1 ? 'Visit' : 'Visits'}
               </span>
             </div>
           </div>
