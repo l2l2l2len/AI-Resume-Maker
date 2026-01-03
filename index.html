@@ -11,76 +11,138 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- PDF Export Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
 
-    <!-- Critical CSS for loading state (prevents FOUC) -->
-    <style>
-      :root {
-        --brand-blue: #2563eb;
-        --bg-secondary: #f9fafb;
-        --text-secondary: #4b5563;
-        --border-light: #e5e7eb;
+    <!-- Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+            },
+            colors: {
+              brand: {
+                50: '#eff6ff',
+                100: '#dbeafe',
+                200: '#bfdbfe',
+                300: '#93c5fd',
+                400: '#60a5fa',
+                500: '#3b82f6',
+                600: '#2563eb',
+                700: '#1d4ed8',
+                800: '#1e40af',
+                900: '#1e3a8a',
+              },
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.5s ease-out',
+              'slide-up': 'slideUp 0.5s ease-out',
+              'slide-down': 'slideDown 0.3s ease-out',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              slideDown: {
+                '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+            },
+          },
+        },
       }
+    </script>
 
-      body {
-        margin: 0;
-        font-family: 'Inter', system-ui, sans-serif;
-      }
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+<style>
+  :root {
+    --brand-blue: #2563eb;
+    --brand-blue-hover: #1d4ed8;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-muted: #6b7280;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f9fafb;
+    --bg-tertiary: #f3f4f6;
+    --border-light: #e5e7eb;
+    --border-medium: #d1d5db;
+  }
 
-      .initial-loading {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        background: var(--bg-secondary);
-      }
+  * {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
 
-      .initial-loading .logo-icon {
-        width: 80px;
-        height: 80px;
-        margin-bottom: 24px;
-        color: #1f2937;
-      }
+  body {
+    min-height: 100vh;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+  }
 
-      .initial-loading .spinner {
-        width: 32px;
-        height: 32px;
-        border: 3px solid var(--border-light);
-        border-top-color: var(--brand-blue);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-      }
+  #root {
+    min-height: 100vh;
+  }
 
-      .initial-loading .text {
-        margin-top: 16px;
-        color: var(--text-secondary);
-        font-size: 14px;
-      }
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
 
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </head>
+  /* Smooth scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  /* Focus styles */
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  /* Safe area insets for mobile devices */
+  @supports (padding: max(0px)) {
+    body {
+      padding-left: max(0px, env(safe-area-inset-left));
+      padding-right: max(0px, env(safe-area-inset-right));
+      padding-bottom: max(0px, env(safe-area-inset-bottom));
+    }
+  }
+</style>
+</head>
   <body>
-    <div id="root">
-      <!-- Loading state shown until React hydrates -->
-      <div class="initial-loading">
-        <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-          <polyline points="14,2 14,8 20,8"/>
-          <line x1="8" y1="13" x2="16" y2="13"/>
-          <line x1="8" y1="17" x2="16" y2="17"/>
-        </svg>
-        <div class="spinner"></div>
-        <div class="text">Loading AI Resume Maker...</div>
-      </div>
-    </div>
+    <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>
