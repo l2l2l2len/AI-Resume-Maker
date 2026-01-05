@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ResumeData, Experience, Education, Internship, Project, CustomSection } from '../types';
 import {
   SectionWrapper,
@@ -14,12 +14,11 @@ import {
 import { Input, Textarea } from './ui/Input';
 import { Button, IconButton } from './ui/Button';
 import { PlusIcon, TrashIcon } from './icons';
+import { getEmailError, getUrlError, getPhoneError } from '../utils/validation';
 
 interface ResumeFormProps {
   resumeData: ResumeData;
   onResumeDataChange: (section: keyof ResumeData, data: any) => void;
-  jobDescription: string;
-  onJobDescriptionChange: (value: string) => void;
   onPreview: () => void;
   onBack: () => void;
 }
@@ -27,14 +26,49 @@ interface ResumeFormProps {
 export const ResumeForm: React.FC<ResumeFormProps> = ({
   resumeData,
   onResumeDataChange,
-  jobDescription,
-  onJobDescriptionChange,
   onPreview,
   onBack,
 }) => {
+  // Validation errors state
+  const [errors, setErrors] = useState<{
+    email?: string;
+    phone?: string;
+    linkedin?: string;
+    website?: string;
+    projectLinks?: { [key: string]: string };
+  }>({});
 
   const handlePersonalInfoChange = (field: keyof ResumeData['personalInfo'], value: string) => {
     onResumeDataChange('personalInfo', { ...resumeData.personalInfo, [field]: value });
+  };
+
+  // Validation handlers
+  const validateEmail = () => {
+    const error = getEmailError(resumeData.personalInfo.email);
+    setErrors(prev => ({ ...prev, email: error }));
+  };
+
+  const validatePhone = () => {
+    const error = getPhoneError(resumeData.personalInfo.phone);
+    setErrors(prev => ({ ...prev, phone: error }));
+  };
+
+  const validateLinkedIn = () => {
+    const error = getUrlError(resumeData.personalInfo.linkedin);
+    setErrors(prev => ({ ...prev, linkedin: error }));
+  };
+
+  const validateWebsite = () => {
+    const error = getUrlError(resumeData.personalInfo.website);
+    setErrors(prev => ({ ...prev, website: error }));
+  };
+
+  const validateProjectLink = (projectId: string, url: string) => {
+    const error = getUrlError(url);
+    setErrors(prev => ({
+      ...prev,
+      projectLinks: { ...prev.projectLinks, [projectId]: error || '' }
+    }));
   };
 
   // --- Experience Handlers ---
@@ -242,23 +276,31 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             type="email"
             value={resumeData.personalInfo.email}
             onChange={(e) => handlePersonalInfoChange('email', e.target.value)}
+            onBlur={validateEmail}
+            error={errors.email}
           />
           <Input
             label="Phone"
             type="tel"
             value={resumeData.personalInfo.phone}
             onChange={(e) => handlePersonalInfoChange('phone', e.target.value)}
+            onBlur={validatePhone}
+            error={errors.phone}
           />
           <Input
             label="LinkedIn Profile"
             value={resumeData.personalInfo.linkedin}
             onChange={(e) => handlePersonalInfoChange('linkedin', e.target.value)}
-            hint="e.g., linkedin.com/in/yourname"
+            onBlur={validateLinkedIn}
+            error={errors.linkedin}
+            hint={!errors.linkedin ? "e.g., linkedin.com/in/yourname" : undefined}
           />
           <Input
             label="Website/Portfolio"
             value={resumeData.personalInfo.website}
             onChange={(e) => handlePersonalInfoChange('website', e.target.value)}
+            onBlur={validateWebsite}
+            error={errors.website}
           />
         </div>
       </SectionWrapper>
@@ -471,7 +513,9 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
                   label="Project Link"
                   value={project.link}
                   onChange={(e) => handleProjectChange(index, 'link', e.target.value)}
-                  hint="GitHub, demo, or portfolio link"
+                  onBlur={() => validateProjectLink(project.id, project.link)}
+                  error={errors.projectLinks?.[project.id]}
+                  hint={!errors.projectLinks?.[project.id] ? "GitHub, demo, or portfolio link" : undefined}
                 />
               </div>
               <div>
