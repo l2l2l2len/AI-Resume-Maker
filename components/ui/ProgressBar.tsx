@@ -20,16 +20,16 @@ const CheckIcon = () => (
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, onStepClick }) => {
   return (
-    <div className="w-full max-w-3xl mx-auto px-2">
+    <div className="w-full max-w-3xl mx-auto">
       <div className="relative">
         {/* Progress Line Background */}
-        <div className="absolute top-[22px] left-0 right-0 h-0.5 bg-gray-200 mx-8 md:mx-10" />
+        <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-200 mx-10" />
 
         {/* Progress Line Fill */}
         <div
-          className="absolute top-[22px] left-0 h-0.5 bg-blue-600 transition-all duration-300 mx-8 md:mx-10"
+          className="absolute top-5 left-0 h-0.5 bg-blue-600 transition-all duration-300 mx-10"
           style={{
-            width: `calc(${((currentStep) / (steps.length - 1)) * 100}% - 2rem)`,
+            width: `calc(${((currentStep) / (steps.length - 1)) * 100}% - 2.5rem)`,
           }}
         />
 
@@ -45,14 +45,14 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
                 key={step.id}
                 className="flex flex-col items-center"
               >
-                {/* Step Circle - 44px minimum touch target */}
+                {/* Step Circle */}
                 <button
                   onClick={() => isClickable && onStepClick(index)}
                   disabled={!isClickable}
                   className={`
-                    relative z-10 w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center
-                    transition-all duration-200 border-2 touch-action-manipulation
-                    ${isClickable ? 'cursor-pointer hover:scale-110 active:scale-95' : 'cursor-default'}
+                    relative z-10 w-10 h-10 rounded-full flex items-center justify-center
+                    transition-all duration-200 border-2
+                    ${isClickable ? 'cursor-pointer hover:scale-110' : 'cursor-default'}
                     ${isCompleted
                       ? 'bg-blue-600 border-blue-600 text-white'
                       : isCurrent
@@ -67,7 +67,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ steps, currentStep, on
                 {/* Step Label */}
                 <span
                   className={`
-                    mt-2 text-sm font-medium
+                    mt-2 text-xs font-medium
                     ${isCompleted || isCurrent ? 'text-gray-900' : 'text-gray-400'}
                   `}
                 >

@@ -227,10 +227,10 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
 
   return (
-    <div className="space-y-4 md:space-y-6 pb-28 md:pb-24 max-w-4xl mx-auto px-0">
+    <div className="space-y-6 pb-24 max-w-4xl mx-auto">
       {/* Personal Info */}
       <SectionWrapper title="Personal Information" icon={<PersonIcon />}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Input
             label="Full Name"
             value={resumeData.personalInfo.name}
@@ -646,14 +646,14 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
       </div>
 
 
-      {/* Navigation - Fixed bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 z-40 safe-area-bottom">
-        <div className="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center gap-3 max-w-4xl">
-          <Button variant="secondary" onClick={onBack} className="flex-1 md:flex-none text-base">
-            <span className="hidden md:inline">Back to</span> Templates
+      {/* Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 glass border-t border-slate-200/50 z-40 safe-area-bottom">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex justify-between items-center gap-2 max-w-4xl">
+          <Button variant="secondary" onClick={onBack} className="text-xs sm:text-sm px-3 sm:px-4">
+            <span className="hidden sm:inline">Back to</span> Templates
           </Button>
-          <Button variant="gradient" size="lg" onClick={onPreview} className="flex-1 md:flex-none text-base">
-            Preview <span className="hidden md:inline">Resume</span>
+          <Button variant="gradient" size="lg" onClick={onPreview} className="text-xs sm:text-sm px-4 sm:px-6">
+            Preview <span className="hidden sm:inline">Resume</span>
           </Button>
         </div>
       </div>

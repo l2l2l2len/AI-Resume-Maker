@@ -39,22 +39,20 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
         ${className}
       `}
     >
-      {/* Header - minimum 44px touch target when collapsible */}
+      {/* Header */}
       <div
         className={`
-          flex items-center justify-between px-4 md:px-6 py-3 md:py-4 min-h-[56px]
-          ${collapsible ? 'cursor-pointer hover:bg-slate-50 active:bg-slate-100 transition-colors touch-action-manipulation' : ''}
+          flex items-center justify-between px-6 py-4
+          ${collapsible ? 'cursor-pointer hover:bg-slate-50 transition-colors' : ''}
           ${!isOpen ? '' : 'border-b border-slate-100'}
         `}
         onClick={collapsible ? () => setIsOpen(!isOpen) : undefined}
-        role={collapsible ? 'button' : undefined}
-        aria-expanded={collapsible ? isOpen : undefined}
       >
         <div className="flex items-center gap-3">
           {/* Icon */}
           {icon && (
             <div
-              className="w-10 h-10 md:w-10 md:h-10 rounded-xl flex items-center justify-center text-white flex-shrink-0"
+              className="w-10 h-10 rounded-xl flex items-center justify-center text-white"
               style={{
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)',
@@ -65,14 +63,14 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
           )}
 
           {/* Title */}
-          <h2 className="text-base md:text-lg font-semibold text-slate-800">
+          <h2 className="text-lg font-semibold text-slate-800 font-display">
             {title}
           </h2>
 
           {/* Badge */}
           {badge !== undefined && (
             <span
-              className="px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0"
+              className="px-2 py-0.5 text-xs font-medium rounded-full"
               style={{
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
@@ -83,15 +81,11 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
           )}
         </div>
 
-        {/* Collapse Toggle - 44px touch target */}
+        {/* Collapse Toggle */}
         {collapsible && (
           <button
-            className="p-2.5 min-w-[44px] min-h-[44px] rounded-lg hover:bg-slate-100 active:bg-slate-200 transition-colors text-slate-500 flex items-center justify-center flex-shrink-0"
+            className="p-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-500"
             aria-label={isOpen ? 'Collapse section' : 'Expand section'}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsOpen(!isOpen);
-            }}
           >
             <ChevronIcon isOpen={isOpen} />
           </button>
@@ -105,7 +99,7 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
           ${isOpen ? 'max-h-[5000px] opacity-100' : 'max-h-0 opacity-0'}
         `}
       >
-        <div className="p-4 md:p-6 pt-3 md:pt-4">
+        <div className="p-6 pt-4">
           {children}
         </div>
       </div>
