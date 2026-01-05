@@ -19,6 +19,14 @@
     <script>
       tailwind.config = {
         theme: {
+          screens: {
+            'xs': '320px',      // Mobile small
+            'sm': '430px',      // Mobile large
+            'md': '768px',      // Tablet
+            'lg': '1024px',     // Laptop
+            'xl': '1440px',     // Desktop
+            '2xl': '1536px',    // Large desktop
+          },
           extend: {
             fontFamily: {
               sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -37,10 +45,20 @@
                 900: '#1e3a8a',
               },
             },
+            spacing: {
+              'touch': '44px',  // Minimum touch target size
+            },
+            minHeight: {
+              'touch': '44px',
+            },
+            minWidth: {
+              'touch': '44px',
+            },
             animation: {
               'fade-in': 'fadeIn 0.5s ease-out',
               'slide-up': 'slideUp 0.5s ease-out',
               'slide-down': 'slideDown 0.3s ease-out',
+              'menu-open': 'menuOpen 0.3s ease-out',
             },
             keyframes: {
               fadeIn: {
@@ -53,6 +71,10 @@
               },
               slideDown: {
                 '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              menuOpen: {
+                '0%': { opacity: '0', transform: 'translateY(-8px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
             },
@@ -83,20 +105,36 @@
     --bg-tertiary: #f3f4f6;
     --border-light: #e5e7eb;
     --border-medium: #d1d5db;
+    --touch-target: 44px;
   }
 
   * {
     font-family: 'Inter', system-ui, sans-serif;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
   }
 
   body {
     min-height: 100vh;
+    min-height: 100dvh;
     background: var(--bg-secondary);
     color: var(--text-primary);
+    font-size: 1rem;
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   #root {
     min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -104,24 +142,39 @@
     color: var(--text-primary);
   }
 
-  /* Smooth scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  /* Prevent horizontal scroll */
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
-  ::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 4px;
+  /* Smooth scrollbar - hide on mobile for cleaner look */
+  @media (min-width: 768px) {
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+  /* Mobile form inputs - prevent zoom on iOS */
+  @media (max-width: 767px) {
+    input, textarea, select {
+      font-size: 16px !important;
+    }
   }
 
   /* Focus styles */
@@ -131,6 +184,18 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
   }
 
+  /* Touch-friendly focus visible */
+  :focus-visible {
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 2px;
+  }
+
+  /* Minimum touch target helper class */
+  .touch-target {
+    min-height: var(--touch-target);
+    min-width: var(--touch-target);
+  }
+
   /* Safe area insets for mobile devices */
   @supports (padding: max(0px)) {
     body {
@@ -138,6 +203,34 @@
       padding-right: max(0px, env(safe-area-inset-right));
       padding-bottom: max(0px, env(safe-area-inset-bottom));
     }
+  }
+
+  /* Glass effect for mobile nav */
+  .glass {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Card 3D effect */
+  .card-3d {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Safe area bottom padding */
+  .safe-area-bottom {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  /* Mobile menu overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
   }
 </style>
 </head>
