@@ -89,18 +89,18 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
   const SelectedTemplate = templates[template];
 
   return (
-    <div className="space-y-4 md:space-y-6 pb-24 md:pb-6">
+    <div className="space-y-6 pb-20 sm:pb-0">
       {/* Header with buttons */}
-      <div className="bg-white p-4 rounded-xl border border-gray-200 flex flex-col md:flex-row md:justify-between md:items-center gap-3">
+      <div className="bg-white p-4 rounded-xl border border-gray-200 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
         <h2 className="text-xl font-semibold text-gray-900">Final Preview</h2>
         <div className="flex items-center gap-3">
-          <Button onClick={onEdit} variant="secondary" className="flex-1 md:flex-none">
+          <Button onClick={onEdit} variant="secondary">
             <BackIcon /> Edit
           </Button>
           <Button
             onClick={handleDownloadPdf}
             disabled={isDownloading}
-            className="hidden md:flex"
+            className="hidden sm:flex"
           >
             {isDownloading ? <SpinnerIcon /> : <DownloadIcon />}
             {isDownloading ? 'Downloading...' : 'Download PDF'}
@@ -109,7 +109,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
       </div>
 
       {/* Resume Preview */}
-      <div className="bg-gray-200 border border-gray-300 rounded-xl p-3 md:p-6 lg:p-8 A4-aspect-ratio">
+      <div className="bg-gray-200 border border-gray-300 rounded-xl p-4 sm:p-8 A4-aspect-ratio">
         <div className="bg-white text-black shadow-lg rounded-lg h-full overflow-auto">
           <SelectedTemplate ref={previewRef} resumeData={resumeData} />
         </div>
@@ -128,12 +128,12 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
         `}</style>
       </div>
 
-      {/* Mobile floating download button - fixed at bottom with safe area */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 safe-area-bottom">
+      {/* Mobile floating download button */}
+      <div className="fixed bottom-4 left-4 right-4 sm:hidden z-50">
         <button
           onClick={handleDownloadPdf}
           disabled={isDownloading}
-          className="w-full py-3.5 px-6 min-h-[48px] rounded-lg text-base font-medium text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 flex items-center justify-center gap-2 disabled:opacity-50 transition-colors touch-action-manipulation"
+          className="w-full py-3 px-6 rounded-lg text-base font-medium text-white bg-blue-600 hover:bg-blue-700 flex items-center justify-center gap-2 disabled:opacity-50 transition-colors"
         >
           {isDownloading ? <><SpinnerIcon />Downloading...</> : <><DownloadIcon />Download PDF</>}
         </button>

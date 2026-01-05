@@ -38,13 +38,13 @@ export const Input: React.FC<InputProps> = ({
           absolute left-3 transition-all duration-200 pointer-events-none z-10
           ${leftIcon ? 'left-10' : 'left-3'}
           ${isFocused || hasValue
-            ? '-top-2.5 text-xs sm:text-sm px-1 bg-white'
-            : 'top-1/2 -translate-y-1/2 text-base'
+            ? '-top-2.5 text-xs px-1 bg-white'
+            : 'top-1/2 -translate-y-1/2 text-sm'
           }
           ${error
             ? 'text-red-500'
             : isFocused
-              ? 'text-blue-600'
+              ? 'text-primary-600'
               : 'text-slate-500'
           }
         `}
@@ -61,7 +61,7 @@ export const Input: React.FC<InputProps> = ({
           </div>
         )}
 
-        {/* Input Field - 16px font prevents iOS zoom, min-height 44px for touch */}
+        {/* Input Field */}
         <input
           id={inputId}
           value={value}
@@ -77,16 +77,15 @@ export const Input: React.FC<InputProps> = ({
           className={`
             w-full px-3 py-3 border rounded-xl
             bg-white text-slate-900
-            text-base min-h-[44px]
             transition-all duration-200
             placeholder:text-transparent
-            touch-action-manipulation
             ${leftIcon ? 'pl-10' : 'pl-3'}
             ${rightIcon || showCharCount ? 'pr-10' : 'pr-3'}
             ${error
               ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-              : 'border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
+              : 'border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20'
             }
+            input-focus-ring
             ${className}
           `}
           {...props}
@@ -94,7 +93,7 @@ export const Input: React.FC<InputProps> = ({
 
         {/* Right Icon or Character Count */}
         {(rightIcon || showCharCount) && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs">
             {showCharCount && maxLength ? (
               <span className={charCount >= maxLength ? 'text-red-500' : ''}>
                 {charCount}/{maxLength}
@@ -108,7 +107,7 @@ export const Input: React.FC<InputProps> = ({
 
       {/* Error or Hint */}
       {(error || hint) && (
-        <p className={`mt-1.5 text-sm ${error ? 'text-red-500' : 'text-slate-500'}`}>
+        <p className={`mt-1.5 text-xs ${error ? 'text-red-500' : 'text-slate-500'}`}>
           {error || hint}
         </p>
       )}
@@ -116,7 +115,7 @@ export const Input: React.FC<InputProps> = ({
   );
 };
 
-// Textarea variant with same styling - mobile optimized
+// Textarea variant with same styling
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
@@ -152,13 +151,13 @@ export const Textarea: React.FC<TextareaProps> = ({
           className={`
             absolute left-3 transition-all duration-200 pointer-events-none z-10
             ${isFocused || hasValue
-              ? '-top-2.5 text-xs sm:text-sm px-1 bg-white'
-              : 'top-3 text-base'
+              ? '-top-2.5 text-xs px-1 bg-white'
+              : 'top-3 text-sm'
             }
             ${error
               ? 'text-red-500'
               : isFocused
-                ? 'text-blue-600'
+                ? 'text-primary-600'
                 : 'text-slate-500'
             }
           `}
@@ -167,7 +166,7 @@ export const Textarea: React.FC<TextareaProps> = ({
         </label>
       )}
 
-      {/* Textarea Field - 16px font prevents iOS zoom */}
+      {/* Textarea Field */}
       <textarea
         id={textareaId}
         value={value}
@@ -184,14 +183,14 @@ export const Textarea: React.FC<TextareaProps> = ({
         className={`
           w-full px-3 py-3 border rounded-xl
           bg-white text-slate-900
-          text-base min-h-[44px]
           transition-all duration-200
           placeholder:text-transparent
-          resize-none touch-action-manipulation
+          resize-none
           ${error
             ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20'
-            : 'border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
+            : 'border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20'
           }
+          input-focus-ring
           ${className}
         `}
         {...props}
@@ -200,12 +199,12 @@ export const Textarea: React.FC<TextareaProps> = ({
       {/* Character Count and Error/Hint */}
       <div className="flex justify-between items-center mt-1.5">
         {(error || hint) && (
-          <p className={`text-sm ${error ? 'text-red-500' : 'text-slate-500'}`}>
+          <p className={`text-xs ${error ? 'text-red-500' : 'text-slate-500'}`}>
             {error || hint}
           </p>
         )}
         {showCharCount && maxLength && (
-          <p className={`text-sm ml-auto ${charCount >= maxLength ? 'text-red-500' : 'text-slate-400'}`}>
+          <p className={`text-xs ml-auto ${charCount >= maxLength ? 'text-red-500' : 'text-slate-400'}`}>
             {charCount}/{maxLength}
           </p>
         )}
