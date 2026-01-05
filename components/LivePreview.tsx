@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { ResumeData } from '../types';
-import { Button } from './ui/Button';
-import { DownloadIcon, SpinnerIcon, BackIcon } from './icons';
 import { Template } from '../App';
 import { TemplateClassic } from './templates/TemplateClassic';
 import { TemplateModern } from './templates/TemplateModern';
@@ -18,6 +16,7 @@ interface LivePreviewProps {
   template: Template;
   onEdit: () => void;
   onSave?: () => void;
+  onChangeTemplate?: () => void;
 }
 
 const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
@@ -28,28 +27,53 @@ const templates: { [key in Template]: React.ForwardRefExoticComponent<any> } = {
   'ats-pro': TemplateATSPro,
 };
 
-// Zoom icons
-const ZoomInIcon = () => (
+// Icons
+const ChevronLeftIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
   </svg>
 );
 
-const ZoomOutIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
+const ShareIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
   </svg>
 );
 
-const ResetZoomIcon = () => (
+const SunIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
   </svg>
 );
 
-const FullscreenIcon = () => (
+const GridIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+  </svg>
+);
+
+const DownloadIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+  </svg>
+);
+
+const MoreIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+  </svg>
+);
+
+const DocumentTextIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+);
+
+const SpinnerIcon = () => (
+  <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
   </svg>
 );
 
@@ -57,39 +81,43 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
   resumeData,
   template,
   onEdit,
-  onSave
+  onSave,
+  onChangeTemplate
 }) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [scale, setScale] = useState(1);
-  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const [scale, setScale] = useState(0.4); // Start smaller on mobile
   const [touchStartDistance, setTouchStartDistance] = useState<number | null>(null);
-  const [initialScale, setInitialScale] = useState(1);
+  const [initialScale, setInitialScale] = useState(0.4);
 
   const { showToast } = useToast();
 
-  const minScale = 0.5;
-  const maxScale = 2;
+  const minScale = 0.3;
+  const maxScale = 1.5;
 
-  // Zoom controls
-  const zoomIn = () => {
-    setScale((prev) => Math.min(prev + 0.25, maxScale));
-  };
+  // Set initial scale based on screen width
+  useEffect(() => {
+    const updateScale = () => {
+      const width = window.innerWidth;
+      if (width < 480) {
+        setScale(0.35);
+        setInitialScale(0.35);
+      } else if (width < 768) {
+        setScale(0.45);
+        setInitialScale(0.45);
+      } else {
+        setScale(0.6);
+        setInitialScale(0.6);
+      }
+    };
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
 
-  const zoomOut = () => {
-    setScale((prev) => Math.max(prev - 0.25, minScale));
-  };
-
-  const resetZoom = () => {
-    setScale(1);
-  };
-
-  const toggleFullscreen = () => {
-    setIsFullscreen(!isFullscreen);
-  };
-
-  // Handle pinch-to-zoom on touch devices
+  // Handle pinch-to-zoom
   const getTouchDistance = (touches: TouchList) => {
     if (touches.length < 2) return null;
     const dx = touches[0].clientX - touches[1].clientX;
@@ -122,7 +150,6 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
     setTouchStartDistance(null);
   }, []);
 
-  // Attach touch event listeners
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
@@ -141,7 +168,7 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
   const handleWheel = useCallback((e: WheelEvent) => {
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault();
-      const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      const delta = e.deltaY > 0 ? -0.05 : 0.05;
       setScale((prev) => Math.min(Math.max(prev + delta, minScale), maxScale));
     }
   }, []);
@@ -157,24 +184,15 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
   const handleDownloadPdf = async () => {
     if (!previewRef.current) return;
 
-    if (typeof html2canvas === 'undefined') {
-      showToast("PDF library not loaded. Please refresh the page.", 'error');
-      return;
-    }
-    if (typeof jspdf === 'undefined' || !jspdf.jsPDF) {
-      showToast("PDF library not loaded. Please refresh the page.", 'error');
+    if (typeof html2canvas === 'undefined' || typeof jspdf === 'undefined') {
+      showToast("PDF library not loaded. Please refresh.", 'error');
       return;
     }
 
     setIsDownloading(true);
+    setShowMoreMenu(false);
+
     try {
-      // Temporarily reset scale for proper capture
-      const originalScale = scale;
-      setScale(1);
-
-      // Wait for scale change to apply
-      await new Promise(resolve => setTimeout(resolve, 100));
-
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         useCORS: true,
@@ -201,182 +219,191 @@ export const LivePreview: React.FC<LivePreviewProps> = ({
       }
 
       const x = (pdfWidth - finalWidth) / 2;
-      const y = 0;
-
-      pdf.addImage(imgData, 'PNG', x, y, finalWidth, finalHeight);
+      pdf.addImage(imgData, 'PNG', x, 0, finalWidth, finalHeight);
 
       const fileName = `${resumeData.personalInfo.name.replace(/\s+/g, '_') || 'Resume'}_Resume.pdf`;
       pdf.save(fileName);
 
-      // Restore original scale
-      setScale(originalScale);
-
-      showToast('Resume downloaded successfully!', 'success');
+      showToast('Resume downloaded!', 'success');
       onSave?.();
-
     } catch (error: any) {
-      console.error("Error downloading PDF:", error);
-      showToast(`Error generating PDF: ${error.message || 'Unknown error'}`, 'error');
+      showToast(`Error: ${error.message || 'Download failed'}`, 'error');
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const handleExportTxt = () => {
+    setShowMoreMenu(false);
+    const { personalInfo, education, experience, skills, summary } = resumeData;
+
+    let txt = `${personalInfo.name}\n`;
+    txt += `${personalInfo.email} | ${personalInfo.phone}\n`;
+    if (personalInfo.linkedin) txt += `LinkedIn: ${personalInfo.linkedin}\n`;
+    if (personalInfo.website) txt += `Website: ${personalInfo.website}\n`;
+    txt += `\n--- SUMMARY ---\n${summary}\n`;
+    txt += `\n--- EXPERIENCE ---\n`;
+    experience.forEach(exp => {
+      txt += `${exp.role} at ${exp.company} (${exp.date})\n`;
+      exp.bulletPoints.forEach(bp => txt += `  • ${bp}\n`);
+    });
+    txt += `\n--- EDUCATION ---\n`;
+    education.forEach(edu => {
+      txt += `${edu.degree} - ${edu.institution} (${edu.date})\n`;
+    });
+    txt += `\n--- SKILLS ---\n${skills.join(', ')}\n`;
+
+    const blob = new Blob([txt], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${personalInfo.name.replace(/\s+/g, '_') || 'Resume'}_Resume.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showToast('Exported as TXT!', 'success');
+  };
+
+  const handleShare = async () => {
+    setShowMoreMenu(false);
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${resumeData.personalInfo.name}'s Resume`,
+          text: 'Check out my resume!',
+        });
+      } catch (e) {
+        // User cancelled
+      }
+    } else {
+      showToast('Sharing not supported on this device', 'info');
     }
   };
 
   const SelectedTemplate = templates[template];
 
   return (
-    <div className={`${isFullscreen ? 'fixed inset-0 z-50 bg-gray-900' : 'space-y-4 pb-24 md:pb-6'}`}>
-      {/* Header with controls */}
-      <div className={`bg-white p-4 rounded-xl border border-gray-200 ${isFullscreen ? 'absolute top-4 left-4 right-4 z-10' : ''}`}>
-        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">Live Preview</h2>
+    <div className="min-h-screen bg-gray-900 flex flex-col -mx-4 -mt-4">
+      {/* Header */}
+      <div className="bg-gray-800 border-b border-gray-700 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={onEdit}
+            className="flex items-center gap-1 text-white text-sm font-medium"
+          >
+            <ChevronLeftIcon />
+            <span>Edit Resume</span>
+          </button>
 
-            {/* Zoom controls - Mobile */}
-            <div className="flex items-center gap-1 md:hidden">
-              <button
-                onClick={zoomOut}
-                disabled={scale <= minScale}
-                className="p-2 min-w-[40px] min-h-[40px] rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30 touch-action-manipulation"
-                aria-label="Zoom out"
-              >
-                <ZoomOutIcon />
-              </button>
-              <span className="text-sm font-medium text-gray-600 min-w-[3rem] text-center">
-                {Math.round(scale * 100)}%
-              </span>
-              <button
-                onClick={zoomIn}
-                disabled={scale >= maxScale}
-                className="p-2 min-w-[40px] min-h-[40px] rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30 touch-action-manipulation"
-                aria-label="Zoom in"
-              >
-                <ZoomInIcon />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 justify-between md:justify-end">
-            {/* Zoom controls - Desktop */}
-            <div className="hidden md:flex items-center gap-1 mr-2">
-              <button
-                onClick={zoomOut}
-                disabled={scale <= minScale}
-                className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30"
-                aria-label="Zoom out"
-              >
-                <ZoomOutIcon />
-              </button>
-              <span className="text-sm font-medium text-gray-600 min-w-[3rem] text-center">
-                {Math.round(scale * 100)}%
-              </span>
-              <button
-                onClick={zoomIn}
-                disabled={scale >= maxScale}
-                className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 disabled:opacity-30"
-                aria-label="Zoom in"
-              >
-                <ZoomInIcon />
-              </button>
-              <button
-                onClick={resetZoom}
-                className="p-2 rounded-lg text-gray-600 hover:bg-gray-100"
-                aria-label="Reset zoom"
-              >
-                <ResetZoomIcon />
-              </button>
-              <button
-                onClick={toggleFullscreen}
-                className="p-2 rounded-lg text-gray-600 hover:bg-gray-100"
-                aria-label="Toggle fullscreen"
-              >
-                <FullscreenIcon />
-              </button>
-            </div>
-
-            <Button onClick={onEdit} variant="secondary" className="flex-1 md:flex-none">
-              <BackIcon /> Edit
-            </Button>
-            <Button
-              onClick={handleDownloadPdf}
-              disabled={isDownloading}
-              className="hidden md:flex"
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-white bg-gray-700 rounded-lg"
             >
-              {isDownloading ? <SpinnerIcon /> : <DownloadIcon />}
-              {isDownloading ? 'Downloading...' : 'Download PDF'}
-            </Button>
+              <ShareIcon />
+              <span>Share Resume</span>
+            </button>
+            <button className="p-2 text-gray-400 hover:text-white">
+              <SunIcon />
+            </button>
           </div>
         </div>
-
-        {/* Mobile zoom hint */}
-        <p className="text-xs text-gray-500 mt-2 md:hidden">
-          Pinch to zoom • Ctrl+Scroll on desktop
-        </p>
       </div>
 
-      {/* Resume Preview Container */}
+      {/* Page count */}
+      <div className="text-center py-2 text-xs text-gray-400">
+        Total: 1 pages
+      </div>
+
+      {/* Preview Container */}
       <div
         ref={containerRef}
-        className={`
-          bg-gray-200 border border-gray-300 rounded-xl overflow-auto
-          ${isFullscreen ? 'absolute inset-0 top-28 m-4 mt-0' : 'p-3 md:p-6 lg:p-8'}
-        `}
-        style={{
-          touchAction: 'pan-x pan-y',
-        }}
+        className="flex-1 overflow-auto px-4 pb-24"
+        style={{ touchAction: 'pan-x pan-y' }}
       >
-        <div
-          className="flex items-start justify-center min-h-full"
-          style={{
-            transform: `scale(${scale})`,
-            transformOrigin: 'top center',
-            transition: 'transform 0.2s ease-out',
-          }}
-        >
+        <div className="flex justify-center py-4">
           <div
-            className="bg-white text-black shadow-lg rounded-lg overflow-hidden"
             style={{
-              width: '210mm',
-              minHeight: '297mm',
+              transform: `scale(${scale})`,
+              transformOrigin: 'top center',
+              transition: 'transform 0.15s ease-out',
             }}
           >
-            <SelectedTemplate ref={previewRef} resumeData={resumeData} />
+            <div
+              className="bg-white text-black shadow-2xl rounded-lg overflow-hidden"
+              style={{
+                width: '210mm',
+                minHeight: '297mm',
+              }}
+            >
+              <SelectedTemplate ref={previewRef} resumeData={resumeData} />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Mobile floating download button */}
-      <div className={`fixed bottom-0 left-0 right-0 md:hidden z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200 safe-area-bottom ${isFullscreen ? 'hidden' : ''}`}>
-        <div className="container mx-auto px-4 py-3 flex gap-3">
+      {/* Bottom Action Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 z-40 safe-area-bottom">
+        <div className="grid grid-cols-3 divide-x divide-gray-700">
+          {/* Change Templates */}
           <button
-            onClick={toggleFullscreen}
-            className="p-3 min-h-[48px] rounded-lg text-gray-600 bg-gray-100 hover:bg-gray-200 touch-action-manipulation"
-            aria-label="Fullscreen"
+            onClick={onChangeTemplate || onEdit}
+            className="flex flex-col items-center justify-center py-3 text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
           >
-            <FullscreenIcon />
+            <GridIcon />
+            <span className="text-[10px] mt-1">Change Templates</span>
           </button>
+
+          {/* Download PDF */}
           <button
             onClick={handleDownloadPdf}
             disabled={isDownloading}
-            className="flex-1 py-3.5 px-6 min-h-[48px] rounded-lg text-base font-medium text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 flex items-center justify-center gap-2 disabled:opacity-50 transition-colors touch-action-manipulation"
+            className="flex flex-col items-center justify-center py-3 text-gray-300 hover:text-white hover:bg-gray-700 transition-colors disabled:opacity-50"
           >
-            {isDownloading ? <><SpinnerIcon />Downloading...</> : <><DownloadIcon />Download PDF</>}
+            {isDownloading ? <SpinnerIcon /> : <DownloadIcon />}
+            <span className="text-[10px] mt-1">
+              {isDownloading ? 'Downloading...' : 'Download PDF'}
+            </span>
           </button>
+
+          {/* More */}
+          <div className="relative">
+            <button
+              onClick={() => setShowMoreMenu(!showMoreMenu)}
+              className="w-full flex flex-col items-center justify-center py-3 text-gray-300 hover:text-white hover:bg-gray-700 transition-colors"
+            >
+              <MoreIcon />
+              <span className="text-[10px] mt-1">More</span>
+            </button>
+
+            {/* More Menu Dropdown */}
+            {showMoreMenu && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setShowMoreMenu(false)}
+                />
+                <div className="absolute bottom-full right-2 mb-2 w-44 bg-white rounded-xl shadow-xl z-50 overflow-hidden">
+                  <button
+                    onClick={handleExportTxt}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+                  >
+                    <DocumentTextIcon />
+                    Export to TXT
+                  </button>
+                  <button
+                    onClick={handleShare}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-t border-gray-100"
+                  >
+                    <ShareIcon />
+                    Share resume
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Fullscreen close button */}
-      {isFullscreen && (
-        <button
-          onClick={toggleFullscreen}
-          className="fixed top-4 right-4 z-50 p-3 bg-white rounded-full shadow-lg text-gray-600 hover:text-gray-900"
-          aria-label="Exit fullscreen"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      )}
     </div>
   );
 };
