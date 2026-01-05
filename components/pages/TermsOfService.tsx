@@ -6,8 +6,8 @@ interface TermsOfServiceProps {
 
 export const TermsOfService: React.FC<TermsOfServiceProps> = ({ onBack }) => {
   return (
-    <div className="min-h-screen bg-white w-full overflow-x-hidden">
-      <div className="w-full max-w-4xl mx-auto px-4 md:px-6 py-12 md:py-16">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-4xl mx-auto px-4 md:px-6 py-12 md:py-16">
         <button
           onClick={onBack}
           className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8 min-h-[44px] text-base"
