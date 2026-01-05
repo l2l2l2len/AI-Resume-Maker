@@ -308,6 +308,7 @@ const AppContent: React.FC = () => {
               template={selectedTemplate}
               onEdit={() => setStep('form')}
               onSave={handleSaveResume}
+              onChangeTemplate={() => setStep('template')}
             />
           </div>
         );
