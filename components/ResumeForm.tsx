@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ResumeData, Experience, Education, Internship, Project, CustomSection } from '../types';
 import {
   SectionWrapper,
@@ -14,12 +14,11 @@ import {
 import { Input, Textarea } from './ui/Input';
 import { Button, IconButton } from './ui/Button';
 import { PlusIcon, TrashIcon } from './icons';
+import { getEmailError, getUrlError, getPhoneError } from '../utils/validation';
 
 interface ResumeFormProps {
   resumeData: ResumeData;
   onResumeDataChange: (section: keyof ResumeData, data: any) => void;
-  jobDescription: string;
-  onJobDescriptionChange: (value: string) => void;
   onPreview: () => void;
   onBack: () => void;
 }
@@ -27,14 +26,49 @@ interface ResumeFormProps {
 export const ResumeForm: React.FC<ResumeFormProps> = ({
   resumeData,
   onResumeDataChange,
-  jobDescription,
-  onJobDescriptionChange,
   onPreview,
   onBack,
 }) => {
+  // Validation errors state
+  const [errors, setErrors] = useState<{
+    email?: string;
+    phone?: string;
+    linkedin?: string;
+    website?: string;
+    projectLinks?: { [key: string]: string };
+  }>({});
 
   const handlePersonalInfoChange = (field: keyof ResumeData['personalInfo'], value: string) => {
     onResumeDataChange('personalInfo', { ...resumeData.personalInfo, [field]: value });
+  };
+
+  // Validation handlers
+  const validateEmail = () => {
+    const error = getEmailError(resumeData.personalInfo.email);
+    setErrors(prev => ({ ...prev, email: error }));
+  };
+
+  const validatePhone = () => {
+    const error = getPhoneError(resumeData.personalInfo.phone);
+    setErrors(prev => ({ ...prev, phone: error }));
+  };
+
+  const validateLinkedIn = () => {
+    const error = getUrlError(resumeData.personalInfo.linkedin);
+    setErrors(prev => ({ ...prev, linkedin: error }));
+  };
+
+  const validateWebsite = () => {
+    const error = getUrlError(resumeData.personalInfo.website);
+    setErrors(prev => ({ ...prev, website: error }));
+  };
+
+  const validateProjectLink = (projectId: string, url: string) => {
+    const error = getUrlError(url);
+    setErrors(prev => ({
+      ...prev,
+      projectLinks: { ...prev.projectLinks, [projectId]: error || '' }
+    }));
   };
 
   // --- Experience Handlers ---
@@ -227,10 +261,10 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
 
   return (
-    <div className="space-y-6 pb-24 max-w-4xl mx-auto">
+    <div className="space-y-4 md:space-y-6 pb-28 md:pb-24 max-w-4xl mx-auto px-0">
       {/* Personal Info */}
       <SectionWrapper title="Personal Information" icon={<PersonIcon />}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
           <Input
             label="Full Name"
             value={resumeData.personalInfo.name}
@@ -242,23 +276,31 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
             type="email"
             value={resumeData.personalInfo.email}
             onChange={(e) => handlePersonalInfoChange('email', e.target.value)}
+            onBlur={validateEmail}
+            error={errors.email}
           />
           <Input
             label="Phone"
             type="tel"
             value={resumeData.personalInfo.phone}
             onChange={(e) => handlePersonalInfoChange('phone', e.target.value)}
+            onBlur={validatePhone}
+            error={errors.phone}
           />
           <Input
             label="LinkedIn Profile"
             value={resumeData.personalInfo.linkedin}
             onChange={(e) => handlePersonalInfoChange('linkedin', e.target.value)}
-            hint="e.g., linkedin.com/in/yourname"
+            onBlur={validateLinkedIn}
+            error={errors.linkedin}
+            hint={!errors.linkedin ? "e.g., linkedin.com/in/yourname" : undefined}
           />
           <Input
             label="Website/Portfolio"
             value={resumeData.personalInfo.website}
             onChange={(e) => handlePersonalInfoChange('website', e.target.value)}
+            onBlur={validateWebsite}
+            error={errors.website}
           />
         </div>
       </SectionWrapper>
@@ -471,7 +513,9 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
                   label="Project Link"
                   value={project.link}
                   onChange={(e) => handleProjectChange(index, 'link', e.target.value)}
-                  hint="GitHub, demo, or portfolio link"
+                  onBlur={() => validateProjectLink(project.id, project.link)}
+                  error={errors.projectLinks?.[project.id]}
+                  hint={!errors.projectLinks?.[project.id] ? "GitHub, demo, or portfolio link" : undefined}
                 />
               </div>
               <div>
@@ -646,14 +690,14 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
       </div>
 
 
-      {/* Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 glass border-t border-slate-200/50 z-40 safe-area-bottom">
-        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex justify-between items-center gap-2 max-w-4xl">
-          <Button variant="secondary" onClick={onBack} className="text-xs sm:text-sm px-3 sm:px-4">
-            <span className="hidden sm:inline">Back to</span> Templates
+      {/* Navigation - Fixed bottom bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 z-40 safe-area-bottom">
+        <div className="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center gap-3 max-w-4xl">
+          <Button variant="secondary" onClick={onBack} className="flex-1 md:flex-none text-base">
+            <span className="hidden md:inline">Back to</span> Templates
           </Button>
-          <Button variant="gradient" size="lg" onClick={onPreview} className="text-xs sm:text-sm px-4 sm:px-6">
-            Preview <span className="hidden sm:inline">Resume</span>
+          <Button variant="gradient" size="lg" onClick={onPreview} className="flex-1 md:flex-none text-base">
+            Preview <span className="hidden md:inline">Resume</span>
           </Button>
         </div>
       </div>

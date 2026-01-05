@@ -4,15 +4,18 @@ import { Header } from './components/Header';
 import { ResumeForm } from './components/ResumeForm';
 import { ResumePreview } from './components/ResumePreview';
 import { Homepage } from './components/Homepage';
-import { isApiConfigured } from './services/geminiService';
 import { INITIAL_RESUME_DATA } from './constants';
 import { TemplateSelector } from './components/TemplateSelector';
-import { ConfigError } from './components/ConfigError';
 import { ProgressBar, TemplateIcon, FormIcon, PreviewIcon } from './components/ui/ProgressBar';
 import { AutoSaveIndicator } from './components/ui/AutoSaveIndicator';
+import { Footer, FooterPage } from './components/Footer';
+import { About } from './components/pages/About';
+import { FAQ } from './components/pages/FAQ';
+import { PrivacyPolicy } from './components/pages/PrivacyPolicy';
+import { TermsOfService } from './components/pages/TermsOfService';
 
 export type Template = 'classic' | 'modern' | 'compact' | 'ats' | 'ats-pro';
-export type Step = 'homepage' | 'template' | 'form' | 'preview';
+export type Step = 'homepage' | 'template' | 'form' | 'preview' | 'about' | 'faq' | 'privacy' | 'terms';
 
 // Progress steps configuration
 const STEPS = [
@@ -45,10 +48,6 @@ const App: React.FC = () => {
     }
   });
 
-  const [jobDescription, setJobDescription] = useState<string>(() => {
-    return localStorage.getItem('jobDescription') || '';
-  });
-
   const [selectedTemplate, setSelectedTemplate] = useState<Template>(() => {
     const savedTemplate = localStorage.getItem('selectedTemplate') as Template;
     return savedTemplate || 'classic';
@@ -67,10 +66,6 @@ const App: React.FC = () => {
   }, [resumeData]);
 
   useEffect(() => {
-    localStorage.setItem('jobDescription', jobDescription);
-  }, [jobDescription]);
-
-  useEffect(() => {
     localStorage.setItem('selectedTemplate', selectedTemplate);
   }, [selectedTemplate]);
 
@@ -87,7 +82,6 @@ const App: React.FC = () => {
   const handleResetResume = () => {
     if (window.confirm("Are you sure you want to start a new resume? All current data will be lost.")) {
       setResumeData(INITIAL_RESUME_DATA);
-      setJobDescription('');
       setSelectedTemplate('classic');
       setStep('homepage');
     }
@@ -99,12 +93,14 @@ const App: React.FC = () => {
   };
 
   const currentStepIndex = getStepIndex(step);
-  const showProgressBar = step !== 'homepage';
+  const isResumeFlow = ['template', 'form', 'preview'].includes(step);
+  const showProgressBar = isResumeFlow;
   const showAutoSave = step === 'form';
 
-  if (!isApiConfigured) {
-    return <ConfigError />;
-  }
+  const handleFooterNavigate = (page: FooterPage) => {
+    setStep(page);
+    window.scrollTo(0, 0);
+  };
 
   const renderStep = () => {
     switch(step) {
@@ -126,8 +122,6 @@ const App: React.FC = () => {
             <ResumeForm
               resumeData={resumeData}
               onResumeDataChange={handleResumeDataChange}
-              jobDescription={jobDescription}
-              onJobDescriptionChange={setJobDescription}
               onPreview={() => setStep('preview')}
               onBack={() => setStep('template')}
             />
@@ -143,21 +137,50 @@ const App: React.FC = () => {
             />
           </div>
         );
+      case 'about':
+        return (
+          <About
+            onBack={() => setStep('homepage')}
+            onStart={() => setStep('template')}
+          />
+        );
+      case 'faq':
+        return (
+          <FAQ
+            onBack={() => setStep('homepage')}
+            onStart={() => setStep('template')}
+          />
+        );
+      case 'privacy':
+        return (
+          <PrivacyPolicy
+            onBack={() => setStep('homepage')}
+          />
+        );
+      case 'terms':
+        return (
+          <TermsOfService
+            onBack={() => setStep('homepage')}
+          />
+        );
       default:
         return <Homepage onStart={() => setStep('template')} />;
     }
   }
 
+  const showHeader = isResumeFlow;
+  const showFooter = ['homepage', 'about', 'faq', 'privacy', 'terms'].includes(step);
+
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      {step !== 'homepage' && (
+    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+      {showHeader && (
         <Header
           onHomeClick={() => setStep('homepage')}
           onResetResume={handleResetResume}
         />
       )}
 
-      <main className={step === 'homepage' ? '' : 'container mx-auto px-4 py-8'}>
+      <main id="main-content" className={`flex-1 ${isResumeFlow ? 'container mx-auto px-4 py-8' : ''}`}>
         {/* Progress Bar */}
         {showProgressBar && (
           <div className="mb-8 animate-slide-down">
@@ -178,6 +201,10 @@ const App: React.FC = () => {
 
         {renderStep()}
       </main>
+
+      {showFooter && (
+        <Footer onNavigate={handleFooterNavigate} />
+      )}
     </div>
   );
 };

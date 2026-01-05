@@ -4,7 +4,34 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI Resume Maker</title>
+    <title>AI Resume Maker - Free Professional Resume Builder</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Create professional, ATS-optimized resumes for free. No sign-up required. Choose from 5 templates, customize your content, and download as PDF instantly." />
+    <meta name="keywords" content="resume builder, free resume maker, ATS resume, professional resume, CV builder, job application, career tools" />
+    <meta name="author" content="AI Resume Maker" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://ai-resume-maker.vercel.app/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://ai-resume-maker.vercel.app/" />
+    <meta property="og:title" content="AI Resume Maker - Free Professional Resume Builder" />
+    <meta property="og:description" content="Create professional, ATS-optimized resumes for free. No sign-up required. Choose from 5 templates and download as PDF." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:site_name" content="AI Resume Maker" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AI Resume Maker - Free Professional Resume Builder" />
+    <meta name="twitter:description" content="Create professional, ATS-optimized resumes for free. No sign-up required." />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="AI Resume" />
 
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,6 +46,14 @@
     <script>
       tailwind.config = {
         theme: {
+          screens: {
+            'xs': '320px',      // Mobile small
+            'sm': '430px',      // Mobile large
+            'md': '768px',      // Tablet
+            'lg': '1024px',     // Laptop
+            'xl': '1440px',     // Desktop
+            '2xl': '1536px',    // Large desktop
+          },
           extend: {
             fontFamily: {
               sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -37,10 +72,20 @@
                 900: '#1e3a8a',
               },
             },
+            spacing: {
+              'touch': '44px',  // Minimum touch target size
+            },
+            minHeight: {
+              'touch': '44px',
+            },
+            minWidth: {
+              'touch': '44px',
+            },
             animation: {
               'fade-in': 'fadeIn 0.5s ease-out',
               'slide-up': 'slideUp 0.5s ease-out',
               'slide-down': 'slideDown 0.3s ease-out',
+              'menu-open': 'menuOpen 0.3s ease-out',
             },
             keyframes: {
               fadeIn: {
@@ -53,6 +98,10 @@
               },
               slideDown: {
                 '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              menuOpen: {
+                '0%': { opacity: '0', transform: 'translateY(-8px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               },
             },
@@ -83,20 +132,36 @@
     --bg-tertiary: #f3f4f6;
     --border-light: #e5e7eb;
     --border-medium: #d1d5db;
+    --touch-target: 44px;
   }
 
   * {
     font-family: 'Inter', system-ui, sans-serif;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
   }
 
   body {
     min-height: 100vh;
+    min-height: 100dvh;
     background: var(--bg-secondary);
     color: var(--text-primary);
+    font-size: 1rem;
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   #root {
     min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -104,24 +169,39 @@
     color: var(--text-primary);
   }
 
-  /* Smooth scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  /* Prevent horizontal scroll */
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
   }
 
-  ::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 4px;
+  /* Smooth scrollbar - hide on mobile for cleaner look */
+  @media (min-width: 768px) {
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
   }
 
-  ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+  /* Mobile form inputs - prevent zoom on iOS */
+  @media (max-width: 767px) {
+    input, textarea, select {
+      font-size: 16px !important;
+    }
   }
 
   /* Focus styles */
@@ -129,6 +209,18 @@
     outline: none;
     border-color: var(--brand-blue);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  /* Touch-friendly focus visible */
+  :focus-visible {
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 2px;
+  }
+
+  /* Minimum touch target helper class */
+  .touch-target {
+    min-height: var(--touch-target);
+    min-width: var(--touch-target);
   }
 
   /* Safe area insets for mobile devices */
@@ -139,10 +231,73 @@
       padding-bottom: max(0px, env(safe-area-inset-bottom));
     }
   }
+
+  /* Glass effect for mobile nav */
+  .glass {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Card 3D effect */
+  .card-3d {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Safe area bottom padding */
+  .safe-area-bottom {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  /* Mobile menu overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 40;
+  }
+
+  /* Skip link for accessibility */
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--brand-blue);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    z-index: 9999;
+    transition: top 0.2s ease;
+  }
+
+  .skip-link:focus {
+    top: 1rem;
+  }
+
+  /* Screen reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 </style>
 </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <div id="root"></div>
+    <div id="announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>

@@ -150,19 +150,19 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   onNext,
 }) => {
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="max-w-5xl mx-auto px-0">
       {/* Header */}
-      <div className="text-center mb-8 sm:mb-12">
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+      <div className="text-center mb-6 md:mb-8 lg:mb-12">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
           Choose Your Template
         </h2>
-        <p className="text-gray-600">
+        <p className="text-base text-gray-600">
           Select a design that best represents your professional brand
         </p>
       </div>
 
-      {/* Template Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+      {/* Template Grid - Single column on small mobile, 2 on larger mobile, 3 on desktop */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
         {templates.map((template) => {
           const isSelected = selectedTemplate === template.id;
 
@@ -170,36 +170,36 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             <button
               key={template.id}
               onClick={() => onSelectTemplate(template.id)}
-              className={`group relative bg-white rounded-xl overflow-hidden transition-all duration-200 ${
+              className={`group relative bg-white rounded-xl overflow-hidden transition-all duration-200 touch-action-manipulation min-h-[180px] text-left ${
                 isSelected
                   ? 'ring-2 ring-blue-600 shadow-lg'
-                  : 'border border-gray-200 hover:shadow-md hover:border-gray-300'
+                  : 'border border-gray-200 hover:shadow-md hover:border-gray-300 active:scale-[0.98]'
               }`}
             >
               {/* Top accent bar */}
               <div
-                className="h-1 w-full"
+                className="h-1.5 md:h-1 w-full"
                 style={{ backgroundColor: template.color }}
               />
 
               {/* Preview area */}
-              <div className="p-3 sm:p-4 bg-gray-100">
+              <div className="p-3 md:p-4 bg-gray-100">
                 <div className="aspect-[210/150] rounded-lg overflow-hidden bg-gray-50">
                   {getPreviewComponent(template.id)}
                 </div>
               </div>
 
               {/* Info section */}
-              <div className="p-3 sm:p-4">
+              <div className="p-3 md:p-4">
                 <div className="flex items-center justify-between mb-1">
-                  <h3 className="text-sm sm:text-base font-semibold text-gray-900">
+                  <h3 className="text-base font-semibold text-gray-900">
                     {template.name}
                   </h3>
                   {isSelected && (
-                    <CheckCircle2 className="w-5 h-5 text-blue-600" />
+                    <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0" />
                   )}
                 </div>
-                <p className="text-xs sm:text-sm text-gray-500 line-clamp-2">
+                <p className="text-sm text-gray-500 line-clamp-2">
                   {template.description}
                 </p>
               </div>
@@ -213,7 +213,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
         <Button
           onClick={onNext}
           size="lg"
-          className="px-8"
+          className="w-full sm:w-auto px-8"
         >
           Continue with {templates.find((t) => t.id === selectedTemplate)?.name}
           <svg
@@ -233,10 +233,10 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       </div>
 
       {/* Template features hint */}
-      <div className="mt-8 sm:mt-12 text-center">
-        <div className="inline-flex flex-wrap justify-center items-center gap-4 sm:gap-6 text-sm text-gray-500">
+      <div className="mt-8 md:mt-12 text-center">
+        <div className="inline-flex flex-wrap justify-center items-center gap-4 md:gap-6 text-base text-gray-500">
           <span className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -246,7 +246,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             ATS-Friendly
           </span>
           <span className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -256,7 +256,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
             Print-Ready
           </span>
           <span className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
