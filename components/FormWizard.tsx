@@ -1,50 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ResumeData, Experience, Education, Internship, Project, CustomSection } from '../types';
+import { ResumeData, Experience, Education } from '../types';
 import { Input, Textarea } from './ui/Input';
 import { Button, IconButton } from './ui/Button';
 import { PlusIcon, TrashIcon } from './icons';
 import { getEmailError, getUrlError, getPhoneError } from '../utils/validation';
 
-// Step icons
-const PersonIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-  </svg>
-);
-
-const ContactIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-  </svg>
-);
-
-const EducationIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-  </svg>
-);
-
-const ExperienceIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-  </svg>
-);
-
-const SkillsIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-  </svg>
-);
-
-const SummaryIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-  </svg>
-);
-
-const CheckIcon = () => (
+// Compact icons (smaller)
+const ChevronDownIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+  </svg>
+);
+
+const ChevronUpIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+  </svg>
+);
+
+const MenuIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+);
+
+const EyeIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
   </svg>
 );
 
@@ -60,7 +43,19 @@ const ChevronRightIcon = () => (
   </svg>
 );
 
-export type FormStep = 'personal' | 'contact' | 'education' | 'experience' | 'skills' | 'summary';
+const LightbulbIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+  </svg>
+);
+
+const SparkleIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+  </svg>
+);
+
+export type FormStep = 'personal' | 'experience' | 'education' | 'skills' | 'summary';
 
 interface FormWizardProps {
   resumeData: ResumeData;
@@ -73,18 +68,105 @@ interface FormWizardProps {
 interface StepConfig {
   id: FormStep;
   label: string;
-  shortLabel: string;
-  icon: React.ReactNode;
+  description: string;
+  proTip?: string;
 }
 
 const STEPS: StepConfig[] = [
-  { id: 'personal', label: 'Personal Info', shortLabel: 'Personal', icon: <PersonIcon /> },
-  { id: 'contact', label: 'Contact Details', shortLabel: 'Contact', icon: <ContactIcon /> },
-  { id: 'education', label: 'Education', shortLabel: 'Education', icon: <EducationIcon /> },
-  { id: 'experience', label: 'Experience', shortLabel: 'Experience', icon: <ExperienceIcon /> },
-  { id: 'skills', label: 'Skills', shortLabel: 'Skills', icon: <SkillsIcon /> },
-  { id: 'summary', label: 'Summary', shortLabel: 'Summary', icon: <SummaryIcon /> },
+  { id: 'personal', label: 'Personal Details', description: 'Basic info & contact', proTip: 'Use a professional email address' },
+  { id: 'experience', label: 'Work Experience', description: 'Your work history', proTip: 'Include relevant internships and volunteer work' },
+  { id: 'education', label: 'Education', description: 'Academic background', proTip: 'Have a low CGPA? You can hide marks!' },
+  { id: 'skills', label: 'Skills', description: 'Your expertise', proTip: 'Include both technical and soft skills' },
+  { id: 'summary', label: 'Summary', description: 'Professional summary', proTip: 'Keep it concise - 2-3 sentences max' },
 ];
+
+const PROGRESS_MESSAGES = [
+  "Just 2 minutes to make your resume. Let's go!",
+  "Great start! Let's add a few key details",
+  "You're doing well. Just a few more sections",
+  "Almost there! Keep going",
+  "Final step! You're about to finish",
+];
+
+// Compact Input Component for mobile
+const CompactInput: React.FC<{
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  type?: string;
+  error?: string;
+}> = ({ label, value, onChange, placeholder, type = 'text', error }) => (
+  <div className="space-y-1">
+    <label className="block text-xs font-medium text-gray-600">{label}</label>
+    <input
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder || label.toLowerCase()}
+      className={`w-full px-3 py-2.5 text-sm bg-gray-50 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all ${
+        error ? 'border-red-300 bg-red-50' : 'border-gray-200'
+      }`}
+    />
+    {error && <p className="text-xs text-red-500">{error}</p>}
+  </div>
+);
+
+// Compact Textarea for mobile
+const CompactTextarea: React.FC<{
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  rows?: number;
+}> = ({ label, value, onChange, placeholder, rows = 2 }) => (
+  <div className="space-y-1">
+    <label className="block text-xs font-medium text-gray-600">{label}</label>
+    <textarea
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={rows}
+      className="w-full px-3 py-2.5 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+    />
+  </div>
+);
+
+// Pro Tip Box
+const ProTip: React.FC<{ tip: string }> = ({ tip }) => (
+  <div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+    <LightbulbIcon />
+    <div>
+      <p className="text-xs font-semibold text-blue-700">Pro Tip</p>
+      <p className="text-xs text-blue-600">{tip}</p>
+    </div>
+  </div>
+);
+
+// Collapsible Section Header
+const SectionHeader: React.FC<{
+  title: string;
+  description: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  count?: number;
+}> = ({ title, description, isOpen, onToggle, count }) => (
+  <button
+    onClick={onToggle}
+    className="w-full flex items-center justify-between p-3 bg-white rounded-lg border border-gray-200 touch-action-manipulation"
+  >
+    <div className="text-left">
+      <div className="flex items-center gap-2">
+        <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
+        {count !== undefined && count > 0 && (
+          <span className="px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded-full">{count}</span>
+        )}
+      </div>
+      <p className="text-xs text-gray-500">{description}</p>
+    </div>
+    {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+  </button>
+);
 
 export const FormWizard: React.FC<FormWizardProps> = ({
   resumeData,
@@ -94,19 +176,25 @@ export const FormWizard: React.FC<FormWizardProps> = ({
   initialStep = 'personal',
 }) => {
   const [currentStep, setCurrentStep] = useState<FormStep>(initialStep);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ main: true });
+  const [showSectionMenu, setShowSectionMenu] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const containerRef = useRef<HTMLDivElement>(null);
 
   const currentStepIndex = STEPS.findIndex((s) => s.id === currentStep);
+  const progressPercent = ((currentStepIndex + 1) / STEPS.length) * 100;
 
-  // Auto-scroll to top on step change
   useEffect(() => {
-    containerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentStep]);
 
+  const toggleSection = (key: string) => {
+    setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
   const goToStep = (step: FormStep) => {
     setCurrentStep(step);
+    setShowSectionMenu(false);
   };
 
   const goNext = () => {
@@ -125,35 +213,13 @@ export const FormWizard: React.FC<FormWizardProps> = ({
     }
   };
 
-  // Validation handlers
-  const validateEmail = () => {
-    const error = getEmailError(resumeData.personalInfo.email);
-    setErrors((prev) => ({ ...prev, email: error || '' }));
-  };
-
-  const validatePhone = () => {
-    const error = getPhoneError(resumeData.personalInfo.phone);
-    setErrors((prev) => ({ ...prev, phone: error || '' }));
-  };
-
-  const validateUrl = (field: string, value: string) => {
-    const error = getUrlError(value);
-    setErrors((prev) => ({ ...prev, [field]: error || '' }));
-  };
-
-  // Personal Info handlers
+  // Handlers
   const handlePersonalInfoChange = (field: keyof ResumeData['personalInfo'], value: string) => {
     onResumeDataChange('personalInfo', { ...resumeData.personalInfo, [field]: value });
   };
 
-  // Education handlers
   const addEducation = () => {
-    const newEducation: Education = {
-      id: `edu${Date.now()}`,
-      institution: '',
-      degree: '',
-      date: '',
-    };
+    const newEducation: Education = { id: `edu${Date.now()}`, institution: '', degree: '', date: '' };
     onResumeDataChange('education', [...resumeData.education, newEducation]);
   };
 
@@ -162,21 +228,14 @@ export const FormWizard: React.FC<FormWizardProps> = ({
   };
 
   const handleEducationChange = (index: number, field: keyof Education, value: string) => {
-    const newEducation = [...resumeData.education];
-    newEducation[index] = { ...newEducation[index], [field]: value };
-    onResumeDataChange('education', newEducation);
+    const updated = [...resumeData.education];
+    updated[index] = { ...updated[index], [field]: value };
+    onResumeDataChange('education', updated);
   };
 
-  // Experience handlers
   const addExperience = () => {
-    const newExperience: Experience = {
-      id: `exp${Date.now()}`,
-      company: '',
-      role: '',
-      date: '',
-      bulletPoints: [''],
-    };
-    onResumeDataChange('experience', [...resumeData.experience, newExperience]);
+    const newExp: Experience = { id: `exp${Date.now()}`, company: '', role: '', date: '', bulletPoints: [''] };
+    onResumeDataChange('experience', [...resumeData.experience, newExp]);
   };
 
   const removeExperience = (index: number) => {
@@ -184,268 +243,209 @@ export const FormWizard: React.FC<FormWizardProps> = ({
   };
 
   const handleExperienceChange = (index: number, field: keyof Experience, value: string | string[]) => {
-    const newExperience = [...resumeData.experience];
-    newExperience[index] = { ...newExperience[index], [field]: value };
-    onResumeDataChange('experience', newExperience);
+    const updated = [...resumeData.experience];
+    updated[index] = { ...updated[index], [field]: value };
+    onResumeDataChange('experience', updated);
   };
 
-  const handleExperienceBulletChange = (expIndex: number, bulletIndex: number, value: string) => {
-    const newExperience = [...resumeData.experience];
-    newExperience[expIndex].bulletPoints[bulletIndex] = value;
-    onResumeDataChange('experience', newExperience);
-  };
-
-  const addExperienceBullet = (expIndex: number) => {
-    const newExperience = [...resumeData.experience];
-    newExperience[expIndex].bulletPoints.push('');
-    onResumeDataChange('experience', newExperience);
-  };
-
-  const removeExperienceBullet = (expIndex: number, bulletIndex: number) => {
-    const newExperience = [...resumeData.experience];
-    newExperience[expIndex].bulletPoints = newExperience[expIndex].bulletPoints.filter((_, i) => i !== bulletIndex);
-    onResumeDataChange('experience', newExperience);
-  };
-
-  // Skills handler
   const handleSkillsChange = (value: string) => {
-    onResumeDataChange('skills', value.split(',').map((skill) => skill.trim()));
+    onResumeDataChange('skills', value.split(',').map(s => s.trim()).filter(Boolean));
   };
 
-  // Render step content
+  const currentStepConfig = STEPS[currentStepIndex];
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 'personal':
         return (
-          <div className="space-y-5">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Personal Information</h2>
-              <p className="text-gray-600">Let's start with your basic details</p>
-            </div>
-            <Input
-              label="Full Name"
-              value={resumeData.personalInfo.name}
-              onChange={(e) => handlePersonalInfoChange('name', e.target.value)}
-              hint="Your full professional name"
+          <div className="space-y-3">
+            <SectionHeader
+              title="Personal Details"
+              description="Your name and contact information"
+              isOpen={expandedSections.main !== false}
+              onToggle={() => toggleSection('main')}
             />
-          </div>
-        );
-
-      case 'contact':
-        return (
-          <div className="space-y-5">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Contact Details</h2>
-              <p className="text-gray-600">How can employers reach you?</p>
-            </div>
-            <Input
-              label="Email"
-              type="email"
-              value={resumeData.personalInfo.email}
-              onChange={(e) => handlePersonalInfoChange('email', e.target.value)}
-              onBlur={validateEmail}
-              error={errors.email}
-            />
-            <Input
-              label="Phone Number"
-              type="tel"
-              value={resumeData.personalInfo.phone}
-              onChange={(e) => handlePersonalInfoChange('phone', e.target.value)}
-              onBlur={validatePhone}
-              error={errors.phone}
-            />
-            <Input
-              label="LinkedIn Profile"
-              value={resumeData.personalInfo.linkedin}
-              onChange={(e) => handlePersonalInfoChange('linkedin', e.target.value)}
-              onBlur={() => validateUrl('linkedin', resumeData.personalInfo.linkedin)}
-              error={errors.linkedin}
-              hint="e.g., linkedin.com/in/yourname"
-            />
-            <Input
-              label="Website/Portfolio"
-              value={resumeData.personalInfo.website}
-              onChange={(e) => handlePersonalInfoChange('website', e.target.value)}
-              onBlur={() => validateUrl('website', resumeData.personalInfo.website)}
-              error={errors.website}
-            />
-          </div>
-        );
-
-      case 'education':
-        return (
-          <div className="space-y-5">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Education</h2>
-              <p className="text-gray-600">Add your educational background</p>
-            </div>
-
-            {resumeData.education.map((edu, index) => (
-              <div
-                key={edu.id}
-                className="p-4 border border-gray-200 rounded-xl space-y-4 bg-gray-50"
-              >
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-500">Education #{index + 1}</span>
-                  <IconButton
-                    variant="danger"
-                    size="sm"
-                    onClick={() => removeEducation(index)}
-                    aria-label="Remove Education"
-                  >
-                    <TrashIcon />
-                  </IconButton>
-                </div>
-                <Input
-                  label="Institution"
-                  value={edu.institution}
-                  onChange={(e) => handleEducationChange(index, 'institution', e.target.value)}
+            {expandedSections.main !== false && (
+              <div className="space-y-3 p-3 bg-gray-50 rounded-lg">
+                <CompactInput
+                  label="Full Name"
+                  value={resumeData.personalInfo.name}
+                  onChange={(v) => handlePersonalInfoChange('name', v)}
+                  placeholder="John Doe"
                 />
-                <Input
-                  label="Degree"
-                  value={edu.degree}
-                  onChange={(e) => handleEducationChange(index, 'degree', e.target.value)}
+                <CompactInput
+                  label="Email"
+                  type="email"
+                  value={resumeData.personalInfo.email}
+                  onChange={(v) => handlePersonalInfoChange('email', v)}
+                  placeholder="john@email.com"
                 />
-                <Input
-                  label="Date"
-                  value={edu.date}
-                  onChange={(e) => handleEducationChange(index, 'date', e.target.value)}
-                  hint="e.g., Sep 2016 - May 2020"
+                <CompactInput
+                  label="Phone"
+                  type="tel"
+                  value={resumeData.personalInfo.phone}
+                  onChange={(v) => handlePersonalInfoChange('phone', v)}
+                  placeholder="+1 234 567 8900"
                 />
-              </div>
-            ))}
-
-            <Button variant="secondary" onClick={addEducation} className="w-full">
-              <PlusIcon /> Add Education
-            </Button>
-          </div>
-        );
-
-      case 'experience':
-        return (
-          <div className="space-y-5">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Work Experience</h2>
-              <p className="text-gray-600">Add your work history</p>
-            </div>
-
-            {resumeData.experience.map((exp, index) => (
-              <div
-                key={exp.id}
-                className="p-4 border border-gray-200 rounded-xl space-y-4 bg-gray-50"
-              >
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-500">Experience #{index + 1}</span>
-                  <IconButton
-                    variant="danger"
-                    size="sm"
-                    onClick={() => removeExperience(index)}
-                    aria-label="Remove Experience"
-                  >
-                    <TrashIcon />
-                  </IconButton>
-                </div>
-                <Input
-                  label="Company"
-                  value={exp.company}
-                  onChange={(e) => handleExperienceChange(index, 'company', e.target.value)}
+                <CompactInput
+                  label="LinkedIn"
+                  value={resumeData.personalInfo.linkedin}
+                  onChange={(v) => handlePersonalInfoChange('linkedin', v)}
+                  placeholder="linkedin.com/in/johndoe"
                 />
-                <Input
-                  label="Role/Position"
-                  value={exp.role}
-                  onChange={(e) => handleExperienceChange(index, 'role', e.target.value)}
+                <CompactInput
+                  label="Website"
+                  value={resumeData.personalInfo.website}
+                  onChange={(v) => handlePersonalInfoChange('website', v)}
+                  placeholder="johndoe.com"
                 />
-                <Input
-                  label="Date Range"
-                  value={exp.date}
-                  onChange={(e) => handleExperienceChange(index, 'date', e.target.value)}
-                  hint="e.g., Jan 2020 - Present"
-                />
-
-                <div className="space-y-3">
-                  <label className="block text-sm font-medium text-gray-600">
-                    Key Achievements
-                  </label>
-                  {exp.bulletPoints.map((point, bulletIndex) => (
-                    <div key={bulletIndex} className="flex items-start gap-2">
-                      <div className="flex-grow">
-                        <Textarea
-                          rows={2}
-                          value={point}
-                          onChange={(e) => handleExperienceBulletChange(index, bulletIndex, e.target.value)}
-                          placeholder={`Achievement #${bulletIndex + 1}`}
-                        />
-                      </div>
-                      <IconButton
-                        variant="danger"
-                        size="sm"
-                        onClick={() => removeExperienceBullet(index, bulletIndex)}
-                        aria-label="Remove Bullet Point"
-                        className="mt-1"
-                      >
-                        <TrashIcon />
-                      </IconButton>
-                    </div>
-                  ))}
-                  <Button variant="ghost" size="sm" onClick={() => addExperienceBullet(index)}>
-                    <PlusIcon /> Add Point
-                  </Button>
-                </div>
-              </div>
-            ))}
-
-            <Button variant="secondary" onClick={addExperience} className="w-full">
-              <PlusIcon /> Add Experience
-            </Button>
-          </div>
-        );
-
-      case 'skills':
-        return (
-          <div className="space-y-5">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Skills</h2>
-              <p className="text-gray-600">What are your key skills and competencies?</p>
-            </div>
-            <Input
-              label="Skills (comma-separated)"
-              value={resumeData.skills.join(', ')}
-              onChange={(e) => handleSkillsChange(e.target.value)}
-              hint="e.g., React, TypeScript, UI/UX Design, Project Management"
-            />
-            {resumeData.skills.length > 0 && (
-              <div className="flex flex-wrap gap-2 mt-4">
-                {resumeData.skills.map((skill, index) =>
-                  skill ? (
-                    <span
-                      key={index}
-                      className="px-3 py-1.5 text-sm rounded-full bg-blue-50 text-blue-700 border border-blue-200"
-                    >
-                      {skill}
-                    </span>
-                  ) : null
-                )}
               </div>
             )}
           </div>
         );
 
+      case 'experience':
+        return (
+          <div className="space-y-3">
+            <SectionHeader
+              title="Work Experience"
+              description="Add up to 5 most recent roles"
+              isOpen={expandedSections.main !== false}
+              onToggle={() => toggleSection('main')}
+              count={resumeData.experience.length}
+            />
+            {expandedSections.main !== false && (
+              <div className="space-y-3">
+                {resumeData.experience.map((exp, idx) => (
+                  <div key={exp.id} className="p-3 bg-gray-50 rounded-lg space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-medium text-gray-500">Experience {idx + 1}</span>
+                      <button
+                        onClick={() => removeExperience(idx)}
+                        className="p-1.5 text-red-500 hover:bg-red-50 rounded"
+                      >
+                        <TrashIcon />
+                      </button>
+                    </div>
+                    <CompactInput label="Company" value={exp.company} onChange={(v) => handleExperienceChange(idx, 'company', v)} />
+                    <CompactInput label="Role" value={exp.role} onChange={(v) => handleExperienceChange(idx, 'role', v)} />
+                    <CompactInput label="Duration" value={exp.date} onChange={(v) => handleExperienceChange(idx, 'date', v)} placeholder="Jan 2020 - Present" />
+                    <CompactTextarea
+                      label="Responsibilities"
+                      value={exp.bulletPoints.join('\n')}
+                      onChange={(v) => handleExperienceChange(idx, 'bulletPoints', v.split('\n'))}
+                      placeholder="• Led team of 5..."
+                      rows={3}
+                    />
+                  </div>
+                ))}
+                <button
+                  onClick={addExperience}
+                  className="w-full flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium text-blue-600 border border-dashed border-blue-300 rounded-lg hover:bg-blue-50"
+                >
+                  <span className="text-lg">+</span> Add Work
+                </button>
+              </div>
+            )}
+            <ProTip tip="Students: Include relevant internships and volunteer work. Professionals: Focus on roles relevant to the job you're applying for." />
+          </div>
+        );
+
+      case 'education':
+        return (
+          <div className="space-y-3">
+            <SectionHeader
+              title="Education"
+              description="Add up to 3 education entries"
+              isOpen={expandedSections.main !== false}
+              onToggle={() => toggleSection('main')}
+              count={resumeData.education.length}
+            />
+            {expandedSections.main !== false && (
+              <div className="space-y-3">
+                {resumeData.education.map((edu, idx) => (
+                  <div key={edu.id} className="p-3 bg-gray-50 rounded-lg space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-medium text-gray-500">Education {idx + 1}</span>
+                      <button
+                        onClick={() => removeEducation(idx)}
+                        className="p-1.5 text-red-500 hover:bg-red-50 rounded"
+                      >
+                        <TrashIcon />
+                      </button>
+                    </div>
+                    <CompactInput label="Institution" value={edu.institution} onChange={(v) => handleEducationChange(idx, 'institution', v)} />
+                    <CompactInput label="Degree" value={edu.degree} onChange={(v) => handleEducationChange(idx, 'degree', v)} />
+                    <CompactInput label="Year" value={edu.date} onChange={(v) => handleEducationChange(idx, 'date', v)} placeholder="2016 - 2020" />
+                  </div>
+                ))}
+                <button
+                  onClick={addEducation}
+                  className="w-full flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium text-blue-600 border border-dashed border-blue-300 rounded-lg hover:bg-blue-50"
+                >
+                  <span className="text-lg">+</span> Add Education
+                </button>
+              </div>
+            )}
+            <ProTip tip="Have a low CGPA or percentage? Enable the 'Hide marks' option to focus on your degree instead!" />
+          </div>
+        );
+
+      case 'skills':
+        return (
+          <div className="space-y-3">
+            <SectionHeader
+              title="Skills"
+              description="Technical and soft skills"
+              isOpen={expandedSections.main !== false}
+              onToggle={() => toggleSection('main')}
+              count={resumeData.skills.filter(Boolean).length}
+            />
+            {expandedSections.main !== false && (
+              <div className="space-y-3 p-3 bg-gray-50 rounded-lg">
+                <CompactInput
+                  label="Skills (comma separated)"
+                  value={resumeData.skills.join(', ')}
+                  onChange={handleSkillsChange}
+                  placeholder="React, TypeScript, Node.js..."
+                />
+                {resumeData.skills.filter(Boolean).length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {resumeData.skills.filter(Boolean).map((skill, i) => (
+                      <span key={i} className="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            <ProTip tip="Include both technical skills (React, Python) and soft skills (Leadership, Communication)" />
+          </div>
+        );
+
       case 'summary':
         return (
-          <div className="space-y-5">
-            <div className="text-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Professional Summary</h2>
-              <p className="text-gray-600">Write a compelling summary of your career</p>
-            </div>
-            <Textarea
-              label="Summary"
-              rows={6}
-              value={resumeData.summary}
-              onChange={(e) => onResumeDataChange('summary', e.target.value)}
-              showCharCount
-              maxLength={500}
-              hint="Write 2-3 sentences about your professional background and goals"
+          <div className="space-y-3">
+            <SectionHeader
+              title="Professional Summary"
+              description="A brief overview of your career"
+              isOpen={expandedSections.main !== false}
+              onToggle={() => toggleSection('main')}
             />
+            {expandedSections.main !== false && (
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <CompactTextarea
+                  label="Summary"
+                  value={resumeData.summary}
+                  onChange={(v) => onResumeDataChange('summary', v)}
+                  placeholder="Experienced software engineer with 5+ years..."
+                  rows={4}
+                />
+                <p className="text-xs text-gray-500 mt-1">{resumeData.summary.length}/300 characters</p>
+              </div>
+            )}
+            <ProTip tip="Keep your summary concise - 2-3 sentences highlighting your key strengths and career goals" />
           </div>
         );
 
@@ -454,103 +454,95 @@ export const FormWizard: React.FC<FormWizardProps> = ({
     }
   };
 
-  const isLastStep = currentStepIndex === STEPS.length - 1;
-
   return (
-    <div className="pb-32" ref={containerRef}>
-      {/* Step Progress Indicator - Horizontal scrollable on mobile */}
-      <div className="mb-6 -mx-4 px-4 overflow-x-auto scrollbar-hide">
-        <div className="flex items-center min-w-max gap-1">
-          {STEPS.map((step, index) => {
-            const isCompleted = index < currentStepIndex;
-            const isCurrent = index === currentStepIndex;
-            const isClickable = index <= currentStepIndex;
-
-            return (
-              <React.Fragment key={step.id}>
-                <button
-                  onClick={() => isClickable && goToStep(step.id)}
-                  disabled={!isClickable}
-                  className={`
-                    flex items-center gap-2 px-3 py-2 rounded-xl transition-all
-                    min-h-[44px] touch-action-manipulation whitespace-nowrap
-                    ${isClickable ? 'cursor-pointer' : 'cursor-default'}
-                    ${isCurrent
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/30'
-                      : isCompleted
-                        ? 'bg-blue-100 text-blue-600'
-                        : 'bg-gray-100 text-gray-400'
-                    }
-                  `}
-                >
-                  <span
-                    className={`
-                      w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold
-                      ${isCurrent
-                        ? 'bg-white/20 text-white'
-                        : isCompleted
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-300 text-gray-500'
-                      }
-                    `}
-                  >
-                    {isCompleted ? <CheckIcon /> : index + 1}
-                  </span>
-                  <span className="text-sm font-medium hidden sm:inline">{step.shortLabel}</span>
-                </button>
-                {index < STEPS.length - 1 && (
-                  <div
-                    className={`w-4 h-0.5 flex-shrink-0 ${
-                      index < currentStepIndex ? 'bg-blue-600' : 'bg-gray-200'
-                    }`}
-                  />
-                )}
-              </React.Fragment>
-            );
-          })}
+    <div className="pb-20 min-h-screen" ref={containerRef}>
+      {/* Progress Bar */}
+      <div className="sticky top-0 z-30 bg-white border-b border-gray-100">
+        <div className="h-1 bg-gray-100">
+          <div
+            className="h-full bg-blue-600 transition-all duration-300"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+        {/* Progress Message */}
+        <div className="flex items-center justify-center gap-1.5 py-2 text-xs text-gray-600">
+          <SparkleIcon />
+          <span>{PROGRESS_MESSAGES[currentStepIndex]}</span>
         </div>
       </div>
 
-      {/* Step Card */}
-      <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm animate-fade-in">
+      {/* Main Content */}
+      <div className="px-4 py-3">
         {renderStepContent()}
       </div>
 
-      {/* Fixed Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 z-40 safe-area-bottom">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center gap-3 max-w-4xl">
-          <Button
-            variant="secondary"
-            onClick={goPrevious}
-            className="flex-1 md:flex-none"
-          >
-            <ChevronLeftIcon />
-            <span className="hidden xs:inline">
-              {currentStepIndex === 0 ? 'Templates' : 'Previous'}
-            </span>
-          </Button>
-
-          <div className="flex items-center gap-1">
-            {STEPS.map((_, index) => (
-              <div
-                key={index}
-                className={`w-2 h-2 rounded-full transition-colors ${
-                  index <= currentStepIndex ? 'bg-blue-600' : 'bg-gray-300'
+      {/* Section Menu Modal */}
+      {showSectionMenu && (
+        <>
+          <div className="fixed inset-0 bg-black/40 z-40" onClick={() => setShowSectionMenu(false)} />
+          <div className="fixed bottom-16 left-4 right-4 bg-white rounded-xl shadow-xl z-50 p-2 max-h-[60vh] overflow-auto">
+            <p className="text-xs font-semibold text-gray-500 px-3 py-2">Jump to section</p>
+            {STEPS.map((step, idx) => (
+              <button
+                key={step.id}
+                onClick={() => goToStep(step.id)}
+                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left ${
+                  currentStep === step.id ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-50'
                 }`}
-              />
+              >
+                <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold ${
+                  idx < currentStepIndex ? 'bg-blue-600 text-white' : idx === currentStepIndex ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-500'
+                }`}>
+                  {idx < currentStepIndex ? '✓' : idx + 1}
+                </span>
+                <div>
+                  <p className="text-sm font-medium">{step.label}</p>
+                  <p className="text-xs text-gray-500">{step.description}</p>
+                </div>
+              </button>
             ))}
           </div>
+        </>
+      )}
 
-          <Button
-            variant="gradient"
-            onClick={goNext}
-            className="flex-1 md:flex-none"
+      {/* Bottom Navigation - 4 buttons like GoResume */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 safe-area-bottom">
+        <div className="grid grid-cols-4 divide-x divide-gray-100">
+          {/* Previous */}
+          <button
+            onClick={goPrevious}
+            className="flex flex-col items-center justify-center py-2.5 text-gray-600 hover:bg-gray-50 active:bg-gray-100"
           >
-            <span className="hidden xs:inline">
-              {isLastStep ? 'Preview' : 'Next'}
-            </span>
+            <ChevronLeftIcon />
+            <span className="text-[10px] mt-0.5">Previous</span>
+          </button>
+
+          {/* Section */}
+          <button
+            onClick={() => setShowSectionMenu(!showSectionMenu)}
+            className="flex flex-col items-center justify-center py-2.5 text-gray-600 hover:bg-gray-50 active:bg-gray-100"
+          >
+            <MenuIcon />
+            <span className="text-[10px] mt-0.5">Section</span>
+          </button>
+
+          {/* Preview */}
+          <button
+            onClick={onComplete}
+            className="flex flex-col items-center justify-center py-2.5 text-gray-600 hover:bg-gray-50 active:bg-gray-100"
+          >
+            <EyeIcon />
+            <span className="text-[10px] mt-0.5">Preview</span>
+          </button>
+
+          {/* Next */}
+          <button
+            onClick={goNext}
+            className="flex flex-col items-center justify-center py-2.5 bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800"
+          >
             <ChevronRightIcon />
-          </Button>
+            <span className="text-[10px] mt-0.5 font-medium">Next</span>
+          </button>
         </div>
       </div>
     </div>
