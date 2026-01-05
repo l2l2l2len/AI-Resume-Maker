@@ -172,7 +172,7 @@ const App: React.FC = () => {
   const showFooter = ['homepage', 'about', 'faq', 'privacy', 'terms'].includes(step);
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col">
+    <div className="min-h-screen bg-gray-50 text-gray-900 flex flex-col w-full max-w-full overflow-x-hidden">
       {showHeader && (
         <Header
           onHomeClick={() => setStep('homepage')}
@@ -180,10 +180,15 @@ const App: React.FC = () => {
         />
       )}
 
-      <main id="main-content" className={`flex-1 ${isResumeFlow ? 'container mx-auto px-4 py-8' : ''}`}>
+      <main
+        id="main-content"
+        className={`flex-1 w-full max-w-full overflow-x-hidden ${
+          isResumeFlow ? 'mx-auto px-4 py-6 md:py-8 md:container' : ''
+        }`}
+      >
         {/* Progress Bar */}
         {showProgressBar && (
-          <div className="mb-8 animate-slide-down">
+          <div className="mb-6 md:mb-8 animate-slide-down">
             <ProgressBar
               steps={STEPS}
               currentStep={currentStepIndex}

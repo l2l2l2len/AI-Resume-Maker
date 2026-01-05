@@ -89,7 +89,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
   const SelectedTemplate = templates[template];
 
   return (
-    <div className="space-y-4 md:space-y-6 pb-24 md:pb-6">
+    <div className="w-full max-w-full overflow-x-hidden space-y-4 md:space-y-6 pb-24 md:pb-6">
       {/* Header with buttons */}
       <div className="bg-white p-4 rounded-xl border border-gray-200 flex flex-col md:flex-row md:justify-between md:items-center gap-3">
         <h2 className="text-xl font-semibold text-gray-900">Final Preview</h2>
@@ -108,28 +108,49 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, templa
         </div>
       </div>
 
-      {/* Resume Preview */}
-      <div className="bg-gray-200 border border-gray-300 rounded-xl p-3 md:p-6 lg:p-8 A4-aspect-ratio">
-        <div className="bg-white text-black shadow-lg rounded-lg h-full overflow-auto">
-          <SelectedTemplate ref={previewRef} resumeData={resumeData} />
+      {/* Resume Preview - scales on mobile for proper viewing */}
+      <div className="w-full overflow-x-auto md:overflow-visible">
+        <div className="bg-gray-200 border border-gray-300 rounded-xl p-2 md:p-6 lg:p-8 resume-preview-container">
+          <div className="bg-white text-black shadow-lg rounded-lg overflow-hidden resume-preview-inner">
+            <SelectedTemplate ref={previewRef} resumeData={resumeData} />
+          </div>
         </div>
-        <style>{`
-          .A4-aspect-ratio {
-            width: 100%;
-            max-width: 850px;
-            margin-left: auto;
-            margin-right: auto;
-          }
-          @media screen and (min-width: 768px) {
-            .A4-aspect-ratio {
-              aspect-ratio: 210 / 297;
-            }
-          }
-        `}</style>
       </div>
 
+      <style>{`
+        .resume-preview-container {
+          width: 100%;
+          max-width: 850px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .resume-preview-inner {
+          width: 100%;
+          min-height: auto;
+        }
+        @media screen and (max-width: 767px) {
+          .resume-preview-container {
+            /* On mobile, show a scaled preview */
+            transform-origin: top left;
+          }
+          .resume-preview-inner {
+            /* Allow natural height on mobile */
+            min-height: 400px;
+          }
+        }
+        @media screen and (min-width: 768px) {
+          .resume-preview-container {
+            aspect-ratio: 210 / 297;
+          }
+          .resume-preview-inner {
+            height: 100%;
+            overflow: auto;
+          }
+        }
+      `}</style>
+
       {/* Mobile floating download button - fixed at bottom with safe area */}
-      <div className="fixed bottom-0 left-0 right-0 md:hidden z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 md:hidden z-50 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4 safe-area-bottom max-w-full">
         <button
           onClick={handleDownloadPdf}
           disabled={isDownloading}

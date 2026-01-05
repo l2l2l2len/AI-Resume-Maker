@@ -150,9 +150,9 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
   onNext,
 }) => {
   return (
-    <div className="max-w-5xl mx-auto px-0">
+    <div className="w-full max-w-5xl mx-auto overflow-x-hidden">
       {/* Header */}
-      <div className="text-center mb-6 md:mb-8 lg:mb-12">
+      <div className="text-center mb-6 md:mb-8 lg:mb-12 px-1">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
           Choose Your Template
         </h2>
@@ -162,7 +162,7 @@ export const TemplateSelector: React.FC<TemplateSelectorProps> = ({
       </div>
 
       {/* Template Grid - Single column on small mobile, 2 on larger mobile, 3 on desktop */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-8 md:mb-12">
         {templates.map((template) => {
           const isSelected = selectedTemplate === template.id;
 
