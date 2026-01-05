@@ -261,7 +261,7 @@ export const ResumeForm: React.FC<ResumeFormProps> = ({
 
 
   return (
-    <div className="space-y-4 md:space-y-6 pb-28 md:pb-24 max-w-4xl mx-auto px-0">
+    <div className="w-full max-w-4xl mx-auto overflow-x-hidden space-y-4 md:space-y-6 pb-28 md:pb-24">
       {/* Personal Info */}
       <SectionWrapper title="Personal Information" icon={<PersonIcon />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
